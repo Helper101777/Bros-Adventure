@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bros Adventure Minecraft Server</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --accent: #4caf50;
+      --bg: #0e0e0e;
+      --card: #1a1a1a;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Orbitron', sans-serif;
+      background: var(--bg);
+      color: #fff;
+      scroll-behavior: smooth;
+    }
+
+    /* FIXED NAVBAR */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(0,0,0,0.85);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 15px 0;
+      z-index: 1000;
+      border-bottom: 2px solid #333;
+    }
+
+    .nav-container {
+      width: 90%;
+      max-width: 1200px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    nav .logo {
+      font-size: 24px;
+      color: var(--accent);
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 30px;
+    }
+
+    nav ul li a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 16px;
+      transition: 0.3s;
+    }
+
+    nav ul li a:hover {
+      color: var(--accent);
+    }
+
+    /* HERO */
+    .hero {
+      background: url('your-uploaded-image.png') center/cover no-repeat;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      position: relative;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+    }
+
+    .hero h1 {
+      font-size: 56px;
+      z-index: 1;
+      color: #fff;
+      text-shadow: 2px 2px 10px #000;
+    }
+
+    /* SECTIONS */
+    section {
+      padding: 100px 60px 60px;
+    }
+
+    .section-title {
+      font-size: 32px;
+      margin-bottom: 30px;
+      border-left: 6px solid var(--accent);
+      padding-left: 15px;
+    }
+
+    .news-item, .admin-card, .lore-box {
+      background: var(--card);
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      border-left: 4px solid var(--accent);
+      transition: transform 0.3s ease;
+    }
+
+    .news-item:hover, .admin-card:hover, .lore-box:hover {
+      transform: scale(1.02);
+    }
+
+    .admin-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .admin-card img {
+      width: 80px;
+      border-radius: 50%;
+      margin-bottom: 10px;
+    }
+
+    footer {
+      background: #111;
+      padding: 30px;
+      text-align: center;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-container">
+      <div class="logo">Bros Adventure</div>
+      <ul>
+        <li><a href="#news">News</a></li>
+        <li><a href="#lore">Lore</a></li>
+        <li><a href="#admins">Admins</a></li>
+         <li><a href="Notes.html">Notes</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <h1>Bros Adventure Minecraft Server</h1>
+  </div>
+
+  <!-- NEWS -->
+<section id="news">
+  <h2 class="section-title">📰 Latest News</h2>
+
+  <div class="news-item">
+    <h3>🛠️ Line 2 Revamp Near Completion</h3>
+    <p>
+      The Line 2 overhaul is almost done! Smoother routes, better views, and cleaner stations are all on the way. 🚆✨
+    </p>
+  </div>
+
+  <div class="news-item">
+    <h3>🏁 F1 Track: Grand Phoenix Circuit</h3>
+    <p>
+      Get ready to race at the Grand Phoenix Circuit — a high-speed F1-inspired track winding through Bros Adventure City. Coming soon! 🔥🏎️
+    </p>
+  </div>
+
+  <div class="news-item">
+    <h3>🌆 Big Updates Coming Soon</h3>
+    <p>
+      New districts, improved transport, and fresh builds are on the horizon. Stay tuned… this is just the beginning. 🌟📢
+    </p>
+  </div>
+</section>
+
+  <!-- LORE -->
+<section id="lore">
+  <h2 class="section-title">📜 Server Lore</h2>
+
+  <div class="lore-box">
+    <h3>🌱 The Beginning — Raspberry Town</h3>
+    <p>
+      It all started in a small place known as <strong>Raspberry Town</strong>, where three brothers began
+      their journey. They explored every corner of the land, searching for a place they could finally
+      call home. 🏡✨
+    </p>
+  </div>
+
+  <div class="lore-box">
+    <h3>🤝 The Reunion</h3>
+    <p>
+      After many adventures, all paths eventually led back to one brother — 
+      <strong>Capybara20131</strong>. Here, the brothers reunited, stronger than ever, ready to build
+      something far greater than any of them imagined. 🔗💚
+    </p>
+  </div>
+
+  <div class="lore-box">
+    <h3>🏙️ The Rise of Bros Adventure</h3>
+    <p>
+      Together, they constructed countless creations: massive cities, towering palaces, sprawling
+      highways, intricate road systems, and architecture so wild it defied imagination.  
+      What began as a simple adventure became a legendary world built by unity, creativity, and
+      brotherhood. 🌆🏰🛣️🔥
+    </p>
+  </div>
+</section>
+
+  <!-- ADMINS -->
+  <section id="admins">
+    <h2 class="section-title">👑 Admin Team</h2>
+
+    <div class="admin-grid">
+      <div class="admin-card">
+        <img src="https://mc-heads.net/avatar/96817" alt="Nabil">
+        <h3>Nabil</h3>
+        <p> Emporer Of the Phoenix Empire</p>
+      </div>
+
+      <div class="admin-card">
+        <img src="https://mc-heads.net/avatar/8f8f3f6f3c3a2d4b9c8f7e6d5c4b3a2f" alt="Friend 1">
+        <h3>Wajih</h3>
+        <p>Pirate of the seas</p>
+      </div>
+
+      <div class="admin-card">
+        <img src="https://mc-heads.net/avatar/8f8f3f6f3c3a2d4b9c8f7e6d5c4b3a2f" alt="Friend 2">
+        <h3>Nader</h3>
+        <p>Shaper of Worlds
+</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    © 2025 Bros Adventure Minecraft Server — Built by Brothers
+  </footer>
+
+</body>
+</html>

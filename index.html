@@ -133,6 +133,30 @@
       text-align: center;
       color: #aaa;
     }
+
+    .price-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.price-card {
+  background: var(--card);
+  padding: 20px;
+  border-radius: 10px;
+  border-left: 4px solid var(--accent);
+  transition: transform 0.3s ease;
+}
+
+.price-card:hover {
+  transform: scale(1.05);
+}
+
+.price-card h3 {
+  margin-top: 0;
+  color: var(--accent);
+}
   </style>
 </head>
 <body>
@@ -281,4 +305,5 @@
 </body>
 
 </html>
+
 

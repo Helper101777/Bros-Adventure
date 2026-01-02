@@ -135,7 +135,7 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // Chat
+    // --- Chat ---
     const messagesRef = collection(db, "messages");
     onSnapshot(query(messagesRef, orderBy("ts")), snapshot => {
       const board = document.getElementById("messages");
@@ -157,7 +157,7 @@
       e.target.reset();
     });
 
-    // Stories
+    // --- Stories ---
     const storiesRef = collection(db, "stories");
     onSnapshot(query(storiesRef, orderBy("ts")), snapshot => {
       const board = document.getElementById("storiesBoard");
@@ -166,4 +166,5 @@
         const d = doc.data();
         const div = document.createElement("div");
         div.className = "story";
-        div.innerHTML = `<strong>${d.title}</strong><br>${d
+        div.innerHTML = `<strong>${
+

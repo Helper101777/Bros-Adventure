@@ -1,322 +1,265 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Bros Adventure Minecraft Server</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bros Adventure Hub</title>
   <style>
-    :root {
-      --accent: #4caf50;
-      --bg: #0e0e0e;
-      --card: #1a1a1a;
-    }
-
-    body {
-      margin: 0;
-      font-family: 'Orbitron', sans-serif;
-      background: var(--bg);
-      color: #fff;
-      scroll-behavior: smooth;
-    }
-
-    /* FIXED NAVBAR */
-    nav {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      background: rgba(0,0,0,0.85);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 15px 0;
-      z-index: 1000;
-      border-bottom: 2px solid #333;
-    }
-
-    .nav-container {
-      width: 90%;
-      max-width: 1200px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    nav .logo {
-      font-size: 24px;
-      color: var(--accent);
-    }
-
-    nav ul {
-      list-style: none;
-      display: flex;
-      gap: 30px;
-    }
-
-    nav ul li a {
-      color: #fff;
-      text-decoration: none;
-      font-size: 16px;
-      transition: 0.3s;
-    }
-
-    nav ul li a:hover {
-      color: var(--accent);
-    }
-
-    /* HERO */
-    .hero {
-      background: url('your-uploaded-image.png') center/cover no-repeat;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      position: relative;
-    }
-
-    .hero::after {
-      content: "";
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.5);
-    }
-
-    .hero h1 {
-      font-size: 56px;
-      z-index: 1;
-      color: #fff;
-      text-shadow: 2px 2px 10px #000;
-    }
-
-    /* SECTIONS */
-    section {
-      padding: 100px 60px 60px;
-    }
-
-    .section-title {
-      font-size: 32px;
-      margin-bottom: 30px;
-      border-left: 6px solid var(--accent);
-      padding-left: 15px;
-    }
-
-    .news-item, .admin-card, .lore-box {
-      background: var(--card);
-      padding: 20px;
-      margin-bottom: 20px;
-      border-radius: 10px;
-      border-left: 4px solid var(--accent);
-      transition: transform 0.3s ease;
-    }
-
-    .news-item:hover, .admin-card:hover, .lore-box:hover {
-      transform: scale(1.02);
-    }
-
-    .admin-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 20px;
-    }
-
-    .admin-card img {
-      width: 80px;
-      border-radius: 50%;
-      margin-bottom: 10px;
-    }
-
-    footer {
-      background: #111;
-      padding: 30px;
-      text-align: center;
-      color: #aaa;
-    }
-
-    .price-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 20px;
-  margin-top: 20px;
-}
-
-.price-card {
-  background: var(--card);
-  padding: 20px;
-  border-radius: 10px;
-  border-left: 4px solid var(--accent);
-  transition: transform 0.3s ease;
-}
-
-.price-card:hover {
-  transform: scale(1.05);
-}
-
-.price-card h3 {
-  margin-top: 0;
-  color: var(--accent);
-}
+    :root { --bg-black:#0d0d0d; --neon-green:#00ff66; --dark-gray:#1a1a1a; }
+    body { font-family:'Trebuchet MS', sans-serif; margin:0; background:var(--bg-black); color:var(--neon-green); }
+    header { text-align:center; padding:2rem; background:var(--dark-gray); border-bottom:2px solid var(--neon-green); }
+    header h1 { margin:0; font-size:2.5rem; color:var(--neon-green); }
+    nav { background:var(--bg-black); display:flex; justify-content:center; padding:.5rem; border-bottom:2px solid var(--neon-green); }
+    nav ul { list-style:none; display:flex; gap:1rem; margin:0; padding:0; }
+    nav a { text-decoration:none; color:var(--neon-green); font-weight:bold; padding:.5rem 1rem; border:1px solid var(--neon-green); border-radius:4px; transition:background .3s, color .3s; }
+    nav a:hover { background:var(--neon-green); color:var(--bg-black); }
+    section { padding:2rem; max-width:1000px; margin:auto; }
+    h2 { border-bottom:2px solid var(--neon-green); padding-bottom:.5rem; margin-bottom:1rem; }
+    .message-board, .story, .notes-list li { background:var(--dark-gray); color:var(--neon-green); border:1px solid var(--neon-green); border-radius:6px; padding:1rem; margin-bottom:1rem; }
+    input, textarea, button { background:var(--bg-black); color:var(--neon-green); border:1px solid var(--neon-green); border-radius:4px; padding:.5rem; }
+    button:hover { background:var(--neon-green); color:var(--bg-black); cursor:pointer; }
+    .admin-card { background:var(--dark-gray); padding:1rem; border:1px solid var(--neon-green); border-radius:6px; flex:1 1 200px; text-align:center; margin:.5rem; }
+    .admins { display:flex; gap:1rem; flex-wrap:wrap; }
+    .calendar-grid { display:grid; grid-template-columns:repeat(7, 1fr); gap:.5rem; }
+    .calendar-grid div { background:var(--dark-gray); border:1px solid var(--neon-green); border-radius:4px; padding:.5rem; min-height:80px; color:var(--neon-green); }
+    .calendar-grid .event { display:block; margin-top:.3rem; font-size:.8rem; color:var(--neon-green); }
+    .action-row { display:flex; gap:.5rem; flex-wrap:wrap; }
+    .meta { font-size:.8rem; opacity:.8; }
   </style>
 </head>
 <body>
+  <header>
+    <h1>Bros Adventure Hub</h1>
+    <p>Black & Green Bros Style</p>
+  </header>
 
-  <!-- NAV -->
   <nav>
-    <div class="nav-container">
-      <div class="logo">Bros Adventure</div>
-      <ul>
-        <li><a href="#news">News</a></li>
-        <li><a href="#books.html">Books</a></li>
-         <li><a href="Notes.html">Notes</a></li>
-      </ul>
-    </div>
+    <ul>
+      <li><a href="#messages">What's Up</a></li>
+      <li><a href="#stories">Stories</a></li>
+      <li><a href="#notes">Notes</a></li>
+      <li><a href="#admins">Admins</a></li>
+      <li><a href="#calendar">Calendar</a></li>
+    </ul>
   </nav>
 
-  <!-- HERO -->
-  <div class="hero">
-    <h1>Bros Adventure Minecraft Server</h1>
-  </div>
+  <!-- Messaging -->
+  <section id="messages">
+    <h2>What's Up</h2>
+    <div class="message-board" id="messageBoard"></div>
+    <form id="messageForm" class="action-row">
+      <input type="text" id="messageInput" placeholder="Type your message..." required>
+      <button type="submit">Send</button>
+    </form>
+  </section>
 
-  <!-- NEWS -->
-<section id="news">
-  <h2 class="section-title">📰 Latest News</h2>
+  <!-- Stories -->
+  <section id="stories">
+    <h2>Stories</h2>
+    <div id="storyBoard"></div>
+    <form id="storyForm" class="action-row">
+      <input type="text" id="storyTitle" placeholder="Story title" required>
+      <textarea id="storyContent" placeholder="Write your story..." required></textarea>
+      <button type="submit">Post Story</button>
+    </form>
+    <p class="meta">Cooldown: 60 seconds between posts. Click Edit to update your story.</p>
+  </section>
 
-  <div class="news-item">
-    <h3>🛠️ Supreme Court And Parlaiment</h3>
-    <p>
-      After 9 months without a Supreme Court and Parlaiment المحكمة العليا والبرلمان
-  Emporor Nabil has decided to construct both tremdondsly huge buildings for a further more presentable
-      and formal Goverment.🚆✨
-    </p>
-  </div>
+  <!-- Notes -->
+  <section id="notes">
+    <h2>Notes</h2>
+    <ul class="notes-list" id="notesList"></ul>
+    <form id="notesForm" class="action-row">
+      <input type="text" id="noteInput" placeholder="Add a new note..." required>
+      <button type="submit">Add Note</button>
+    </form>
+  </section>
 
-  <div class="news-item">
-    <h3>🏁 F1 Track: Grand Phoenix Circuit</h3>
-    <p>
-      Get ready to race at the Grand Phoenix Circuit — a high-speed F1-inspired track winding through Bros Adventure City. Coming soon! 🔥🏎️
-    </p>
-  </div>
-
-  <div class="news-item">
-    <h3>🌆 International Updates</h3>
-    <p> Al Sultan Nader 1 International Highway الطريق الدولي السلطان نادر 1 Offical Complted after several revamps across a Phoenix Plains it has come to an end with the 
-      construction of a new bridge, and a small port Al Waj Port for futher transpotation to Jurrasic Park Zoo and for futher Genral Use.All of which are free for to use
-      Dock 2 Completed but not open yet.Graand Rat Theatre officaly open!
-     . 🌟📢
-    </p>
-  </div>
-</section>
-
-
-  <section id="prices">
-  <h2 class="section-title">💰 Prices & Tickets</h2>
-
-  <div class="price-grid">
-
-    <div class="price-card">
-      <h3>🦓 Jurrasic Park Zoo</h3>
-      <p>Entry Ticket: <strong>7 Emeralds  </strong></p>
-      <p>Family Pass 2 People : 12 Emeralds <strong></strong></p>
-    </div>
-
-    <div class="price-card">
-      <h3>🏟️ Phoenix Empire Stadium</h3>
-      <p>Match Ticket: <strong> 5 Emeralds </strong></p>
-      <p>VIP Pass: <strong> 7 Emeralds </strong></p>
-      <p>To Fight: <strong> 8 Emeralds with 2 extra emeralds as deposit for damages </strong></p>
-    </div>
-
-    <div class="price-card">
-      <h3> Grand Phoenix Circuit</h3>
-      <p>Day Pass: <strong>10 Emeralds</strong></p>
-      <p>Season Pass: <strong>32 Emerlads</strong></p>
-    </div>
-
-        <div class="price-card">
-      <h3>🎡 Grand Rat Theater</h3>
-      <p>Regular Seat: <strong>N/A</strong></p>
-      <p>VIP Seat: <strong>N/A</strong></p>
-    </div>
-
-        <div class="price-card">
-      <h3> Al Sultan Nader 1 International Highway</h3>
-      <p> One Hour: <strong>7 Emeralds</strong></p>
-      <p>All Day: <strong>32 Emerlads</strong></p>
-    </div>
-
-  </div>
-</section>
-
-  <!-- LORE -->
-<section id="lore">
-  <h2 class="section-title">📜 Server Lore</h2>
-
-  <div class="lore-box">
-    <h3>🌱 The Beginning — Raspberry Town</h3>
-    <p>
-      It all started in a small place known as <strong>Raspberry Town</strong>, where three brothers began
-      their journey. They explored every corner of the land, searching for a place they could finally
-      call home. 🏡✨
-    </p>
-  </div>
-
-  <div class="lore-box">
-    <h3>🤝 The Reunion</h3>
-    <p>
-      After many adventures, all paths eventually led back to one brother — 
-      <strong>Capybara20131</strong>. Here, the brothers reunited, stronger than ever, ready to build
-      something far greater than any of them imagined. 🔗💚
-    </p>
-  </div>
-
-  <div class="lore-box">
-    <h3>🏙️ The Rise of Bros Adventure</h3>
-    <p>
-      Together, they constructed countless creations: massive cities, towering palaces, sprawling
-      highways, intricate road systems, and architecture so wild it defied imagination.  
-      What began as a simple adventure became a legendary world built by unity, creativity, and
-      brotherhood. 🌆🏰🛣️🔥
-    </p>
-  </div>
-</section>
-
-  <!-- ADMINS -->
+  <!-- Admins -->
   <section id="admins">
-    <h2 class="section-title">👑 Admin Team</h2>
-
-    <div class="admin-grid">
-      <div class="admin-card">
-        <img src="https://mc-heads.net/avatar/96817" alt="Nabil">
-        <h3>Nabil</h3>
-        <p> Emporer Of the Phoenix Empire</p>
-      </div>
-
-      <div class="admin-card">
-        <img src="https://mc-heads.net/avatar/8f8f3f6f3c3a2d4b9c8f7e6d5c4b3a2f" alt="Friend 1">
-        <h3>Wajih</h3>
-        <p>Pirate of the seas</p>
-      </div>
-
-      <div class="admin-card">
-        <img src="https://mc-heads.net/avatar/8f8f3f6f3c3a2d4b9c8f7e6d5c4b3a2f" alt="Friend 2">
-        <h3>Nader</h3>
-        <p>Shaper of Worlds
-</p>
-      </div>
+    <h2>Admins</h2>
+    <div class="admins">
+      <div class="admin-card"><h3>Nabil</h3><p>Founder & Designer</p></div>
+      <div class="admin-card"><h3>Friend1</h3><p>Community Manager</p></div>
+      <div class="admin-card"><h3>Friend2</h3><p>Event Organizer</p></div>
     </div>
   </section>
 
-  <footer>
-    © 2025 Bros Adventure Minecraft Server — Built by Brothers
-  </footer>
+  <!-- Calendar -->
+  <section id="calendar">
+    <h2>Event Calendar (31 Days)</h2>
+    <div class="calendar-grid" id="calendarGrid"></div>
+    <form id="calendarForm" class="action-row">
+      <input type="number" id="eventDay" placeholder="Day (1-31)" min="1" max="31" required>
+      <input type="text" id="eventName" placeholder="Event name" required>
+      <button type="submit">Add Event</button>
+    </form>
+  </section>
 
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // --- Messaging ---
+      const messageBoard = document.getElementById('messageBoard');
+      const messageForm = document.getElementById('messageForm');
+      const messageInput = document.getElementById('messageInput');
+
+      const savedMessages = JSON.parse(localStorage.getItem('messages')) || [];
+      savedMessages.forEach(text => {
+        const msg = document.createElement('div');
+        msg.className = 'message';
+        msg.textContent = text;
+        messageBoard.appendChild(msg);
+      });
+
+      messageForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const val = messageInput.value.trim();
+        if (!val) return;
+        const msgText = 'You: ' + val;
+        const msg = document.createElement('div');
+        msg.className = 'message';
+        msg.textContent = msgText;
+        messageBoard.appendChild(msg);
+        const store = JSON.parse(localStorage.getItem('messages')) || [];
+        store.push(msgText);
+        localStorage.setItem('messages', JSON.stringify(store));
+        messageInput.value = '';
+        messageInput.focus();
+      });
+
+      // --- Stories with cooldown + edit ---
+      const storyBoard = document.getElementById('storyBoard');
+      const storyForm = document.getElementById('storyForm');
+      const storyTitle = document.getElementById('storyTitle');
+      const storyContent = document.getElementById('storyContent');
+      let lastStoryTime = parseInt(localStorage.getItem('lastStoryTime') || '0', 10);
+      const COOLDOWN_MS = 60000; // 60s
+
+      function renderStory(storyObj) {
+        const wrap = document.createElement('div');
+        wrap.className = 'story';
+        wrap.innerHTML = `
+          <h3>${storyObj.title}</h3>
+          <p>${storyObj.content}</p>
+          <div class="action-row">
+            <button class="editBtn">Edit</button>
+            <button class="deleteBtn">Delete</button>
+          </div>
+        `;
+        // Edit
+        wrap.querySelector('.editBtn').addEventListener('click', () => {
+          const updated = prompt('Edit your story text:', storyObj.content);
+          if (updated !== null && updated.trim() !== '') {
+            storyObj.content = updated.trim();
+            wrap.querySelector('p').textContent = storyObj.content;
+            const all = JSON.parse(localStorage.getItem('stories')) || [];
+            const idx = all.findIndex(s => s.id === storyObj.id);
+            if (idx > -1) { all[idx] = storyObj; localStorage.setItem('stories', JSON.stringify(all)); }
+          }
+        });
+        // Delete
+        wrap.querySelector('.deleteBtn').addEventListener('click', () => {
+          const all = JSON.parse(localStorage.getItem('stories')) || [];
+          const next = all.filter(s => s.id !== storyObj.id);
+          localStorage.setItem('stories', JSON.stringify(next));
+          wrap.remove();
+        });
+        storyBoard.appendChild(wrap);
+      }
+
+      // Load stories
+      const savedStories = JSON.parse(localStorage.getItem('stories')) || [];
+      savedStories.forEach(renderStory);
+
+      // Post story with cooldown
+      storyForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const now = Date.now();
+        if (now - lastStoryTime < COOLDOWN_MS) {
+          const wait = Math.ceil((COOLDOWN_MS - (now - lastStoryTime)) / 1000);
+          alert('Please wait ' + wait + 's before posting another story.');
+          return;
+        }
+        const title = storyTitle.value.trim();
+        const content = storyContent.value.trim();
+        if (!title || !content) return;
+
+        const newStory = { id: Date.now(), title, content };
+        renderStory(newStory);
+        const all = JSON.parse(localStorage.getItem('stories')) || [];
+        all.push(newStory);
+        localStorage.setItem('stories', JSON.stringify(all));
+        lastStoryTime = now;
+        localStorage.setItem('lastStoryTime', String(now));
+        storyForm.reset();
+      });
+
+      // --- Notes ---
+      const notesList = document.getElementById('notesList');
+      const notesForm = document.getElementById('notesForm');
+      const noteInput = document.getElementById('noteInput');
+
+      const savedNotes = JSON.parse(localStorage.getItem('notes')) || [];
+      savedNotes.forEach(text => {
+        const li = document.createElement('li');
+        li.textContent = text;
+        notesList.appendChild(li);
+      });
+
+      notesForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const val = noteInput.value.trim();
+        if (!val) return;
+        const li = document.createElement('li');
+        li.textContent = val;
+        notesList.appendChild(li);
+        const store = JSON.parse(localStorage.getItem('notes')) || [];
+        store.push(val);
+        localStorage.setItem('notes', JSON.stringify(store));
+        noteInput.value = '';
+        noteInput.focus();
+      });
+
+      // --- Calendar (31 days, saved) ---
+      const calendarGrid = document.getElementById('calendarGrid');
+      const calendarForm = document.getElementById('calendarForm');
+      const eventDay = document.getElementById('eventDay');
+      const eventName = document.getElementById('eventName');
+
+      const savedEvents = JSON.parse(localStorage.getItem('events')) || {};
+      for (let day = 1; day <= 31; day++) {
+        const cell = document.createElement('div');
+        cell.dataset.day = String(day);
+        cell.innerHTML = `<strong>${day}</strong>`;
+        const evs = savedEvents[day] || [];
+        evs.forEach(ev => {
+          const span = document.createElement('span');
+          span.className = 'event';
+          span.textContent = ev;
+          cell.appendChild(span);
+        });
+        calendarGrid.appendChild(cell);
+      }
+
+      calendarForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const d = parseInt(eventDay.value, 10);
+        const name = eventName.value.trim();
+        if (isNaN(d) || d < 1 || d > 31 || !name) return;
+
+        const cell = calendarGrid.querySelector('[data-day="' + d + '"]');
+        const span = document.createElement('span');
+        span.className = 'event';
+        span.textContent = name;
+        cell.appendChild(span);
+
+        const store = JSON.parse(localStorage.getItem('events')) || {};
+        store[d] = store[d] || [];
+        store[d].push(name);
+        localStorage.setItem('events', JSON.stringify(store));
+        calendarForm.reset();
+      });
+    });
+  </script>
 </body>
-
 </html>
-
-
-
-
-
-

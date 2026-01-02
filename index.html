@@ -25,6 +25,26 @@
     .calendar-grid .event { display:block; margin-top:.3rem; font-size:.8rem; color:var(--neon-green); }
     .action-row { display:flex; gap:.5rem; flex-wrap:wrap; }
     .meta { font-size:.8rem; opacity:.8; }
+    .news-board {
+  background: var(--dark-gray);
+  border: 1px solid var(--neon-green);
+  border-radius: 6px;
+  padding: 1rem;
+  color: var(--neon-green);
+}
+.news-item {
+  margin-bottom: 1rem;
+  padding-bottom: .5rem;
+  border-bottom: 1px dashed var(--neon-green);
+}
+.news-item a {
+  color: var(--neon-green);
+  text-decoration: none;
+  font-weight: bold;
+}
+.news-item a:hover {
+  color: #fff;
+}
   </style>
 </head>
 <body>
@@ -74,6 +94,11 @@
       <button type="submit">Add Note</button>
     </form>
   </section>
+
+  <section id="news">
+  <h2>Latest News</h2>
+  <div class="news-board" id="newsBoard"></div>
+</section>
 
   <!-- Admins -->
   <section id="admins">
@@ -263,3 +288,4 @@
   </script>
 </body>
 </html>
+

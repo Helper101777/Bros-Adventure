@@ -124,6 +124,13 @@
     color: #e0e0e0;
     margin-top: 4px;
   }
+      #newsBoard .story {
+  background: var(--dark-gray);
+  border: 1px solid var(--neon-green);
+  border-radius: 6px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
 </style>
   </style>
 </head>
@@ -177,6 +184,16 @@
     import {
       getFirestore, collection, addDoc, onSnapshot, query, orderBy
     } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+
+    <section id="news">
+  <h2>Latest News</h2>
+  <div id="newsBoard"></div>
+  <form id="newsForm" class="action-row">
+    <input id="newsTitle" placeholder="Headline" required>
+    <textarea id="newsContent" placeholder="News content..." required></textarea>
+    <button>Add News</button>
+  </form>
+</section>
 
     // Firebase config
     const firebaseConfig = {
@@ -288,8 +305,37 @@
       await addDoc(eventsRef, { day, name, ts: Date.now() });
       e.target.reset();
     });
+
+    // --- News ---
+const newsRef = collection(db, "news");
+
+// Listen for news items
+onSnapshot(query(newsRef, orderBy("ts")), snapshot => {
+  const board = document.getElementById("newsBoard");
+  board.innerHTML = "";
+  snapshot.forEach(doc => {
+    const d = doc.data();
+    const div = document.createElement("div");
+    div.className = "story"; // reuse same card style
+    div.innerHTML = `<strong>${d.title}</strong><br>${d.content}`;
+    board.appendChild(div);
+  });
+});
+
+// Add news item
+document.getElementById("newsForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const title = document.getElementById("newsTitle").value.trim();
+  const content = document.getElementById("newsContent").value.trim();
+  if (!title || !content) return;
+  await addDoc(newsRef, { title, content, ts: Date.now() });
+  e.target.reset();
+});
+
+    
   </script>
 </body>
 </html>
+
 
 

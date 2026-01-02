@@ -93,12 +93,11 @@
     <div class="card" id="newsBoard"></div>
   </section>
 
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+  <!-- Firebase SDKs -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, onSnapshot, orderBy, query, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
-  <script>
-    // ✅ Your bros-hub Firebase config
     const firebaseConfig = {
       apiKey: "AIzaSyA3kfPBpuSJo6QKU1hv-lG0UNfSVca0us4",
       authDomain: "bros-hub.firebaseapp.com",
@@ -109,57 +108,54 @@
       measurementId: "G-TQ80WBSSZ6"
     };
 
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
     const $ = id => document.getElementById(id);
 
     // Messaging
-    db.collection("messages").orderBy("ts","asc").onSnapshot(snap => {
+    const messagesRef = collection(db, "messages");
+    onSnapshot(query(messagesRef, orderBy("ts")), snap => {
       $("messageBoard").innerHTML = "";
-      snap.forEach(doc => {
-        const m = doc.data();
+      snap.forEach(docSnap => {
+        const m = docSnap.data();
         const div = document.createElement("div");
         div.className = "message";
         div.textContent = m.text;
         $("messageBoard").appendChild(div);
       });
     });
-    $("messageForm").addEventListener("submit", e => {
+    $("messageForm").addEventListener("submit", async e => {
       e.preventDefault();
       const val = $("messageInput").value.trim();
       if (!val) return;
-      db.collection("messages").add({ text: "You: " + val, ts: Date.now() });
+      await addDoc(messagesRef, { text: "You: " + val, ts: Date.now() });
       e.target.reset();
     });
 
     // Stories
-    const COOLDOWN_MS = 60000;
-    let lastStoryTime = 0;
-    db.collection("stories").orderBy("ts","asc").onSnapshot(snap => {
+    const storiesRef = collection(db, "stories");
+    onSnapshot(query(storiesRef, orderBy("ts")), snap => {
       $("storyBoard").innerHTML = "";
-      snap.forEach(doc => {
-        const s = doc.data();
+      snap.forEach(docSnap => {
+        const s = docSnap.data();
         const wrap = document.createElement("div");
         wrap.className = "card";
         wrap.innerHTML = `<h3>${s.title}</h3><p>${s.content}</p>
           <div class="actions"><button class="editBtn">Edit</button><button class="deleteBtn">Delete</button></div>`;
-        wrap.querySelector(".editBtn").addEventListener("click", () => {
+        wrap.querySelector(".editBtn").addEventListener("click", async () => {
           const updated = prompt("Edit your story:", s.content);
-          if (updated) db.collection("stories").doc(doc.id).update({ content: updated });
+          if (updated) await updateDoc(doc(storiesRef, docSnap.id), { content: updated });
         });
-        wrap.querySelector(".deleteBtn").addEventListener("click", () => {
-          db.collection("stories").doc(doc.id).delete();
+        wrap.querySelector(".deleteBtn").addEventListener("click", async () => {
+          await deleteDoc(doc(storiesRef, docSnap.id));
         });
         $("storyBoard").appendChild(wrap);
       });
     });
-    $("storyForm").addEventListener("submit", e => {
+    $("storyForm").addEventListener("submit", async e => {
       e.preventDefault();
-      const now = Date.now();
-      if (now - lastStoryTime < COOLDOWN_MS) {
-        alert("Wait before posting another story!");
-        return;
-      }
       const title = $("storyTitle").value.trim();
       const content = $("storyContent").value.trim();
-      if (!title
+      if (!title || !content) return;
+      await addDoc(storiesRef, { title, content, ts: Date.now() });
+     

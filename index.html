@@ -3,199 +3,125 @@
 <head>
   <meta charset="UTF-8">
   <title>Bros Hub</title>
-   <style>
+  <style>
     :root { --bg-black:#0d0d0d; --neon-green:#00ff66; --dark-gray:#1a1a1a; }
     body { font-family:'Trebuchet MS', sans-serif; margin:0; background:var(--bg-black); color:var(--neon-green); }
     header { text-align:center; padding:2rem; background:var(--dark-gray); border-bottom:2px solid var(--neon-green); }
     header h1 { margin:0; font-size:2.5rem; color:var(--neon-green); }
-    nav { background:var(--bg-black); display:flex; justify-content:center; padding:.5rem; border-bottom:2px solid var(--neon-green); }
+    nav { background:var(--bg-black); display:flex; justify-content:center; padding:.5rem; border-bottom:2px solid var(--neon-green); position:sticky; top:0; z-index:10; }
     nav ul { list-style:none; display:flex; gap:1rem; margin:0; padding:0; }
     nav a { text-decoration:none; color:var(--neon-green); font-weight:bold; padding:.5rem 1rem; border:1px solid var(--neon-green); border-radius:4px; transition:background .3s, color .3s; }
     nav a:hover { background:var(--neon-green); color:var(--bg-black); }
     section { padding:2rem; max-width:1000px; margin:auto; }
     h2 { border-bottom:2px solid var(--neon-green); padding-bottom:.5rem; margin-bottom:1rem; }
-    .message-board, .story, .notes-list li { background:var(--dark-gray); color:var(--neon-green); border:1px solid var(--neon-green); border-radius:6px; padding:1rem; margin-bottom:1rem; }
+    .message-board, .story, .note, .announcement, .news-item { background:var(--dark-gray); color:var(--neon-green); border:1px solid var(--neon-green); border-radius:6px; padding:1rem; margin-bottom:1rem; }
     input, textarea, button { background:var(--bg-black); color:var(--neon-green); border:1px solid var(--neon-green); border-radius:4px; padding:.5rem; }
     button:hover { background:var(--neon-green); color:var(--bg-black); cursor:pointer; }
     .admin-card { background:var(--dark-gray); padding:1rem; border:1px solid var(--neon-green); border-radius:6px; flex:1 1 200px; text-align:center; margin:.5rem; }
     .admins { display:flex; gap:1rem; flex-wrap:wrap; }
     .calendar-grid { display:grid; grid-template-columns:repeat(7, 1fr); gap:.5rem; }
-    .calendar-grid div { background:var(--dark-gray); border:1px solid var(--neon-green); border-radius:4px; padding:.5rem; min-height:80px; color:var(--neon-green); }
+    .calendar-grid .day { background:var(--dark-gray); border:1px solid var(--neon-green); border-radius:4px; padding:.5rem; min-height:80px; color:var(--neon-green); }
     .calendar-grid .event { display:block; margin-top:.3rem; font-size:.8rem; color:var(--neon-green); }
     .action-row { display:flex; gap:.5rem; flex-wrap:wrap; }
-    .meta { font-size:.8rem; opacity:.8; }
-  </style>
-    <style>
-  body {
-    background: #121212;
-    color: #e0e0e0;
-    font-family: "Segoe UI", Roboto, sans-serif;
-    margin: 0;
-    padding: 20px;
-  }
-
-  h1 {
-    text-align: center;
-    color: #00ff88;
-    margin-bottom: 30px;
-  }
-
-  h2 {
-    color: #00ff88;
-    border-bottom: 2px solid #00ff88;
-    padding-bottom: 5px;
-    margin-top: 30px;
-  }
-
-  .section {
-    margin-bottom: 40px;
-  }
-
-  #messages, #stories, #notes, #calendar {
-    background: #1e1e1e;
-    border-radius: 8px;
-    padding: 15px;
-    min-height: 150px;
-    box-shadow: 0 0 10px rgba(0,255,136,0.3);
-    overflow-y: auto;
-  }
-
-  form {
-    margin-top: 10px;
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
-
-  input, textarea, button {
-    background: #2a2a2a;
-    color: #e0e0e0;
-    border: 1px solid #00ff88;
-    border-radius: 6px;
-    padding: 10px;
-    font-size: 14px;
-    flex: 1;
-    transition: all 0.2s ease;
-  }
-
-  input:focus, textarea:focus {
-    outline: none;
-    border-color: #00ffaa;
-    box-shadow: 0 0 6px #00ffaa;
-  }
-
-  button {
-    flex: 0;
-    cursor: pointer;
-    background: #00ff88;
-    color: #121212;
-    font-weight: bold;
-  }
-
-  button:hover {
-    background: #00ffaa;
-  }
-
-  .msg, .story, .note, .event {
-    margin: 6px 0;
-    padding: 8px;
-    background: #2a2a2a;
-    border-radius: 4px;
-  }
-
-  .calendar-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 6px;
-    margin-top: 10px;
-  }
-
-  .day {
-    background: #2a2a2a;
-    border-radius: 6px;
-    min-height: 70px;
-    padding: 6px;
-    font-size: 13px;
-    color: #00ff88;
-  }
-
-  .event {
-    font-size: 12px;
-    color: #e0e0e0;
-    margin-top: 4px;
-  }
-      #newsBoard .story {
-  background: var(--dark-gray);
-  border: 1px solid var(--neon-green);
-  border-radius: 6px;
-  padding: 1rem;
-  margin-bottom: 1rem;
-}
-</style>
   </style>
 </head>
 <body>
-  <h1>Bros Hub</h1>
+  <header>
+    <h1>Bros Hub</h1>
+  </header>
+
+  <nav>
+    <ul>
+      <li><a href="#chat">Chat</a></li>
+      <li><a href="#stories">Stories</a></li>
+      <li><a href="#notes">Notes</a></li>
+      <li><a href="#calendar">Calendar</a></li>
+      <li><a href="#news">News</a></li>
+      <li><a href="#announcements">Announcements</a></li>
+      <li><a href="#admins">Admins</a></li>
+    </ul>
+  </nav>
 
   <!-- Chat -->
-  <div class="section">
+  <section id="chat">
     <h2>Chat</h2>
-    <div id="messages"></div>
-    <form id="messageForm">
+    <div id="messages" class="message-board"></div>
+    <form id="messageForm" class="action-row">
       <input id="messageInput" placeholder="Type message..." required>
       <button>Send</button>
     </form>
-  </div>
+  </section>
 
   <!-- Stories -->
-  <div class="section">
+  <section id="stories">
     <h2>Stories</h2>
-    <div id="stories"></div>
-    <form id="storyForm">
+    <div id="storiesBoard"></div>
+    <form id="storyForm" class="action-row">
       <input id="storyTitle" placeholder="Title" required>
       <textarea id="storyContent" placeholder="Content" required></textarea>
       <button>Add Story</button>
     </form>
-  </div>
+  </section>
 
   <!-- Notes -->
-  <div class="section">
+  <section id="notes">
     <h2>Notes</h2>
-    <div id="notes"></div>
-    <form id="noteForm">
+    <div id="notesBoard"></div>
+    <form id="noteForm" class="action-row">
       <input id="noteInput" placeholder="Write a note..." required>
       <button>Add Note</button>
     </form>
-  </div>
+  </section>
 
   <!-- Calendar -->
-  <div class="section">
+  <section id="calendar">
     <h2>Calendar</h2>
-    <div id="calendar" class="calendar-grid"></div>
-    <form id="eventForm">
+    <div id="calendarGrid" class="calendar-grid"></div>
+    <form id="eventForm" class="action-row">
       <input id="eventDay" type="number" min="1" max="31" placeholder="Day (1-31)" required>
       <input id="eventName" placeholder="Event name" required>
       <button>Add Event</button>
     </form>
-  </div>
+  </section>
+
+  <!-- News -->
+  <section id="news">
+    <h2>Latest News</h2>
+    <div id="newsBoard"></div>
+    <form id="newsForm" class="action-row">
+      <input id="newsTitle" placeholder="Headline" required>
+      <textarea id="newsContent" placeholder="News content..." required></textarea>
+      <button>Add News</button>
+    </form>
+  </section>
+
+  <!-- Announcements -->
+  <section id="announcements">
+    <h2>Announcements</h2>
+    <div id="announcementsBoard"></div>
+    <form id="announcementForm" class="action-row">
+      <input id="announcementTitle" placeholder="Title" required>
+      <textarea id="announcementContent" placeholder="Announcement details..." required></textarea>
+      <button>Add Announcement</button>
+    </form>
+  </section>
+
+  <!-- Admins -->
+  <section id="admins">
+    <h2>Admins</h2>
+    <div class="admins" id="adminsBoard"></div>
+    <form id="adminForm" class="action-row">
+      <input id="adminName" placeholder="Admin name" required>
+      <input id="adminRole" placeholder="Role" required>
+      <button>Add Admin</button>
+    </form>
+  </section>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
-    import {
-      getFirestore, collection, addDoc, onSnapshot, query, orderBy
-    } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } 
+      from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
-    <section id="news">
-  <h2>Latest News</h2>
-  <div id="newsBoard"></div>
-  <form id="newsForm" class="action-row">
-    <input id="newsTitle" placeholder="Headline" required>
-    <textarea id="newsContent" placeholder="News content..." required></textarea>
-    <button>Add News</button>
-  </form>
-</section>
-
-    // Firebase config
     const firebaseConfig = {
       apiKey: "AIzaSyAOWDg95YOPCBYzN5vWOVBik0AUNOyqZeI",
       authDomain: "bros-hub-cdbf2.firebaseapp.com",
@@ -217,7 +143,7 @@
       snapshot.forEach(doc => {
         const d = doc.data();
         const div = document.createElement("div");
-        div.className = "msg";
+        div.className = "message-board";
         div.textContent = d.text;
         board.appendChild(div);
       });
@@ -234,13 +160,13 @@
     // --- Stories ---
     const storiesRef = collection(db, "stories");
     onSnapshot(query(storiesRef, orderBy("ts")), snapshot => {
-      const board = document.getElementById("stories");
+      const board = document.getElementById("storiesBoard");
       board.innerHTML = "";
       snapshot.forEach(doc => {
         const d = doc.data();
         const div = document.createElement("div");
         div.className = "story";
-        div.innerHTML = `${d.title}: ${d.content}`;
+        div.innerHTML = `<strong>${d.title}</strong><br>${d.content}`;
         board.appendChild(div);
       });
     });
@@ -256,7 +182,7 @@
     // --- Notes ---
     const notesRef = collection(db, "notes");
     onSnapshot(query(notesRef, orderBy("ts")), snapshot => {
-      const board = document.getElementById("notes");
+      const board = document.getElementById("notesBoard");
       board.innerHTML = "";
       snapshot.forEach(doc => {
         const d = doc.data();
@@ -277,17 +203,17 @@
     // --- Calendar ---
     const eventsRef = collection(db, "events");
     function renderCalendar(events) {
-      const grid = document.getElementById("calendar");
+      const grid = document.getElementById("calendarGrid");
       grid.innerHTML = "";
       for (let day = 1; day <= 31; day++) {
         const cell = document.createElement("div");
         cell.className = "day";
         cell.innerHTML = `<strong>${day}</strong>`;
         events.filter(ev => ev.day == day).forEach(ev => {
-          const div = document.createElement("div");
-          div.className = "event";
-          div.textContent = ev.name;
-          cell.appendChild(div);
+          const evDiv = document.createElement("span");
+          evDiv.className = "event";
+          evDiv.textContent = ev.name;
+          cell.appendChild(evDiv);
         });
         grid.appendChild(cell);
       }
@@ -307,36 +233,70 @@
     });
 
     // --- News ---
-const newsRef = collection(db, "news");
+    const newsRef = collection(db, "news");
+    onSnapshot(query(newsRef, orderBy("ts")), snapshot => {
+      const board = document.getElementById("newsBoard");
+      board.innerHTML = "";
+      snapshot.forEach(doc => {
+        const d = doc.data();
+        const div = document.createElement("div");
+        div.className = "news-item";
+        div.innerHTML = `<strong>${d.title}</strong><br>${d.content}`;
+        board.appendChild(div);
+      });
+    });
+    document.getElementById("newsForm").addEventListener("submit", async e => {
+      e.preventDefault();
+      const title = document.getElementById("newsTitle").value.trim();
+      const content = document.getElementById("newsContent").value.trim();
+      if (!title || !content) return;
+      await addDoc(newsRef, { title, content, ts: Date.now() });
+      e.target.reset();
+    });
 
-// Listen for news items
-onSnapshot(query(newsRef, orderBy("ts")), snapshot => {
-  const board = document.getElementById("newsBoard");
-  board.innerHTML = "";
-  snapshot.forEach(doc => {
-    const d = doc.data();
-    const div = document.createElement("div");
-    div.className = "story"; // reuse same card style
-    div.innerHTML = `<strong>${d.title}</strong><br>${d.content}`;
-    board.appendChild(div);
-  });
-});
+    // --- Announcements ---
+    const announcementsRef = collection(db, "announcements");
+    onSnapshot(query(announcementsRef, orderBy("ts")), snapshot => {
+      const board = document.getElementById("announcementsBoard");
+      board.innerHTML = "";
+      snapshot.forEach(doc => {
+        const d = doc.data();
+        const div = document.createElement("div");
+        div.className = "announcement";
+        div.innerHTML = `<strong>${d.title}</strong><br>${d.content}`;
+        board.appendChild(div);
+      });
+    });
+    document.getElementById("announcementForm").addEventListener("submit", async e => {
+      e.preventDefault();
+      const title = document.getElementById("announcementTitle").value.trim();
+      const content = document.getElementById("announcementContent").value.trim();
+      if (!title || !content) return;
+      await addDoc(announcementsRef, { title, content, ts: Date.now() });
+      e.target.reset();
+    });
 
-// Add news item
-document.getElementById("newsForm").addEventListener("submit", async e => {
-  e.preventDefault();
-  const title = document.getElementById("newsTitle").value.trim();
-  const content = document.getElementById("newsContent").value.trim();
-  if (!title || !content) return;
-  await addDoc(newsRef, { title, content, ts: Date.now() });
-  e.target.reset();
-});
-
-    
+    // --- Admins ---
+    const adminsRef = collection(db, "admins");
+    onSnapshot(query(adminsRef, orderBy("ts")), snapshot => {
+      const board = document.getElementById("adminsBoard");
+      board.innerHTML = "";
+      snapshot.forEach(doc => {
+        const d = doc.data();
+        const card = document.createElement("div");
+        card.className = "admin-card";
+        card.innerHTML = `<strong>${d.name}</strong><br>${d.role}`;
+        board.appendChild(card);
+      });
+    });
+    document.getElementById("adminForm").addEventListener("submit", async e => {
+      e.preventDefault();
+      const name = document.getElementById("adminName").value.trim();
+      const role = document.getElementById("adminRole").value.trim();
+      if (!name || !role) return;
+      await addDoc(adminsRef, { name, role, ts: Date.now() });
+      e.target.reset();
+    });
   </script>
 </body>
 </html>
-
-
-
-

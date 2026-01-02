@@ -4,18 +4,44 @@
   <meta charset="UTF-8">
   <title>Bros Hub</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
+    body {
+      background-color: black;
+      color: limegreen;
+      font-family: monospace;
+      margin: 20px;
+    }
     h2 { margin-top: 30px; }
     .section { margin-bottom: 20px; }
-    #messages, #stories, #notes, #calendar { border: 1px solid #ccc; padding: 10px; min-height: 150px; }
-    form { margin-top: 10px; }
-    input, textarea { padding: 6px; margin-right: 6px; }
-    button { padding: 6px 12px; }
-    .msg, .story, .note, .event { border-bottom: 1px solid #eee; padding: 4px; }
-    .author { font-weight: bold; margin-right: 6px; }
-    .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
-    .day { border: 1px solid #ccc; min-height: 60px; padding: 4px; font-size: 12px; }
-    .event { font-size: 11px; color: #333; }
+    #messages, #stories, #notes, #calendar {
+      border: 1px solid limegreen;
+      padding: 10px;
+      min-height: 150px;
+      overflow-y: auto;
+    }
+    form { margin-top: 10px; display: flex; gap: 6px; }
+    input, textarea, button {
+      background: black;
+      color: limegreen;
+      border: 1px solid limegreen;
+      padding: 6px;
+      font-family: monospace;
+    }
+    textarea { flex: 1; }
+    input { flex: 1; }
+    button { cursor: pointer; }
+    .msg, .story, .note, .event { margin: 4px 0; }
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+    }
+    .day {
+      border: 1px solid limegreen;
+      min-height: 60px;
+      padding: 4px;
+      font-size: 12px;
+    }
+    .event { font-size: 11px; }
   </style>
 </head>
 <body>
@@ -26,7 +52,6 @@
     <h2>Chat</h2>
     <div id="messages"></div>
     <form id="messageForm">
-      <input id="name" placeholder="Your name" required>
       <input id="messageInput" placeholder="Type message..." required>
       <button>Send</button>
     </form>
@@ -93,7 +118,7 @@
         const d = doc.data();
         const div = document.createElement("div");
         div.className = "msg";
-        div.innerHTML = `<span class="author">${d.author || "Anon"}:</span> ${d.text}`;
+        div.textContent = d.text;
         board.appendChild(div);
       });
       board.scrollTop = board.scrollHeight;
@@ -101,9 +126,8 @@
     document.getElementById("messageForm").addEventListener("submit", async e => {
       e.preventDefault();
       const text = document.getElementById("messageInput").value.trim();
-      const author = document.getElementById("name").value.trim() || "Anon";
       if (!text) return;
-      await addDoc(messagesRef, { text, author, ts: Date.now() });
+      await addDoc(messagesRef, { text, ts: Date.now() });
       e.target.reset();
     });
 
@@ -116,7 +140,7 @@
         const d = doc.data();
         const div = document.createElement("div");
         div.className = "story";
-        div.innerHTML = `<strong>${d.title}</strong><br>${d.content}`;
+        div.innerHTML = `${d.title}: ${d.content}`;
         board.appendChild(div);
       });
     });
@@ -184,3 +208,4 @@
   </script>
 </body>
 </html>
+

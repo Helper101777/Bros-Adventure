@@ -1,264 +1,185 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bros Adventure Hub</title>
+  <title>Bros Hub</title>
   <style>
-    :root { --bg-black:#0d0d0d; --neon-green:#00ff66; --dark-gray:#1a1a1a; }
-    body { font-family:'Trebuchet MS', sans-serif; margin:0; background:var(--bg-black); color:var(--neon-green); }
-    header { text-align:center; padding:2rem; background:var(--dark-gray); border-bottom:2px solid var(--neon-green); }
-    header h1 { margin:0; font-size:2.5rem; color:var(--neon-green); }
-    nav { background:var(--bg-black); display:flex; justify-content:center; padding:.5rem; border-bottom:2px solid var(--neon-green); }
-    nav ul { list-style:none; display:flex; gap:1rem; margin:0; padding:0; }
-    nav a { text-decoration:none; color:var(--neon-green); font-weight:bold; padding:.5rem 1rem; border:1px solid var(--neon-green); border-radius:4px; transition:background .3s, color .3s; }
-    nav a:hover { background:var(--neon-green); color:var(--bg-black); }
-    section { padding:2rem; max-width:1000px; margin:auto; }
-    h2 { border-bottom:2px solid var(--neon-green); padding-bottom:.5rem; margin-bottom:1rem; }
-    .message-board, .story, .notes-list li { background:var(--dark-gray); color:var(--neon-green); border:1px solid var(--neon-green); border-radius:6px; padding:1rem; margin-bottom:1rem; }
-    input, textarea, button { background:var(--bg-black); color:var(--neon-green); border:1px solid var(--neon-green); border-radius:4px; padding:.5rem; }
-    button:hover { background:var(--neon-green); color:var(--bg-black); cursor:pointer; }
-    .admin-card { background:var(--dark-gray); padding:1rem; border:1px solid var(--neon-green); border-radius:6px; flex:1 1 200px; text-align:center; margin:.5rem; }
-    .admins { display:flex; gap:1rem; flex-wrap:wrap; }
-    .calendar-grid { display:grid; grid-template-columns:repeat(7, 1fr); gap:.5rem; }
-    .calendar-grid div { background:var(--dark-gray); border:1px solid var(--neon-green); border-radius:4px; padding:.5rem; min-height:80px; color:var(--neon-green); }
-    .calendar-grid .event { display:block; margin-top:.3rem; font-size:.8rem; color:var(--neon-green); }
-    .action-row { display:flex; gap:.5rem; flex-wrap:wrap; }
-    .meta { font-size:.8rem; opacity:.8; }
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    h2 { margin-top: 30px; }
+    .section { margin-bottom: 20px; }
+    #messages, #stories, #notes, #calendar { border: 1px solid #ccc; padding: 10px; min-height: 150px; }
+    form { margin-top: 10px; }
+    input, textarea { padding: 6px; margin-right: 6px; }
+    button { padding: 6px 12px; }
+    .msg, .story, .note, .event { border-bottom: 1px solid #eee; padding: 4px; }
+    .author { font-weight: bold; margin-right: 6px; }
+    .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+    .day { border: 1px solid #ccc; min-height: 60px; padding: 4px; font-size: 12px; }
+    .event { font-size: 11px; color: #333; }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Bros Adventure Hub</h1>
-    <p>Black & Green Bros Style</p>
-  </header>
+  <h1>Bros Hub</h1>
 
-  <nav>
-    <ul>
-      <li><a href="#messages">What's Up</a></li>
-      <li><a href="#stories">Stories</a></li>
-      <li><a href="#notes">Notes</a></li>
-      <li><a href="#admins">Admins</a></li>
-      <li><a href="#calendar">Calendar</a></li>
-    </ul>
-  </nav>
-
-  <!-- Messaging -->
-  <section id="messages">
-    <h2>What's Up</h2>
-    <div class="message-board" id="messageBoard"></div>
-    <form id="messageForm" class="action-row">
-      <input type="text" id="messageInput" placeholder="Type your message..." required>
-      <button type="submit">Send</button>
+  <!-- Chat -->
+  <div class="section">
+    <h2>Chat</h2>
+    <div id="messages"></div>
+    <form id="messageForm">
+      <input id="name" placeholder="Your name" required>
+      <input id="messageInput" placeholder="Type message..." required>
+      <button>Send</button>
     </form>
-  </section>
+  </div>
 
   <!-- Stories -->
-  <section id="stories">
+  <div class="section">
     <h2>Stories</h2>
-    <div id="storyBoard"></div>
-    <form id="storyForm" class="action-row">
-      <input type="text" id="storyTitle" placeholder="Story title" required>
-      <textarea id="storyContent" placeholder="Write your story..." required></textarea>
-      <button type="submit">Post Story</button>
+    <div id="stories"></div>
+    <form id="storyForm">
+      <input id="storyTitle" placeholder="Title" required>
+      <textarea id="storyContent" placeholder="Content" required></textarea>
+      <button>Add Story</button>
     </form>
-    <p class="meta">Cooldown: 60 seconds between posts. Click Edit to update your story.</p>
-  </section>
+  </div>
 
   <!-- Notes -->
-  <section id="notes">
+  <div class="section">
     <h2>Notes</h2>
-    <ul class="notes-list" id="notesList"></ul>
-    <form id="notesForm" class="action-row">
-      <input type="text" id="noteInput" placeholder="Add a new note..." required>
-      <button type="submit">Add Note</button>
+    <div id="notes"></div>
+    <form id="noteForm">
+      <input id="noteInput" placeholder="Write a note..." required>
+      <button>Add Note</button>
     </form>
-  </section>
-
-  <!-- Admins -->
-  <section id="admins">
-    <h2>Admins</h2>
-    <div class="admins">
-      <div class="admin-card"><h3>Nabil</h3><p>Founder & Designer</p></div>
-      <div class="admin-card"><h3>Friend1</h3><p>Community Manager</p></div>
-      <div class="admin-card"><h3>Friend2</h3><p>Event Organizer</p></div>
-    </div>
-  </section>
+  </div>
 
   <!-- Calendar -->
-  <section id="calendar">
-    <h2>Event Calendar (31 Days)</h2>
-    <div class="calendar-grid" id="calendarGrid"></div>
-    <form id="calendarForm" class="action-row">
-      <input type="number" id="eventDay" placeholder="Day (1-31)" min="1" max="31" required>
-      <input type="text" id="eventName" placeholder="Event name" required>
-      <button type="submit">Add Event</button>
+  <div class="section">
+    <h2>Calendar</h2>
+    <div id="calendar" class="calendar-grid"></div>
+    <form id="eventForm">
+      <input id="eventDay" type="number" min="1" max="31" placeholder="Day (1-31)" required>
+      <input id="eventName" placeholder="Event name" required>
+      <button>Add Event</button>
     </form>
-  </section>
+  </div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      // --- Messaging ---
-      const messageBoard = document.getElementById('messageBoard');
-      const messageForm = document.getElementById('messageForm');
-      const messageInput = document.getElementById('messageInput');
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+    import {
+      getFirestore, collection, addDoc, onSnapshot, query, orderBy
+    } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
-      const savedMessages = JSON.parse(localStorage.getItem('messages')) || [];
-      savedMessages.forEach(text => {
-        const msg = document.createElement('div');
-        msg.className = 'message';
-        msg.textContent = text;
-        messageBoard.appendChild(msg);
+    // Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyA3kfPBpuSJo6QKU1hv-lG0UNfSVca0us4",
+      authDomain: "bros-hub.firebaseapp.com",
+      projectId: "bros-hub",
+      storageBucket: "bros-hub.firebasestorage.app",
+      messagingSenderId: "515943987938",
+      appId: "1:515943987938:web:285fa1b80c6b23e149bcbb",
+      measurementId: "G-TQ80WBSSZ6"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // --- Chat ---
+    const messagesRef = collection(db, "messages");
+    onSnapshot(query(messagesRef, orderBy("ts")), snapshot => {
+      const board = document.getElementById("messages");
+      board.innerHTML = "";
+      snapshot.forEach(doc => {
+        const d = doc.data();
+        const div = document.createElement("div");
+        div.className = "msg";
+        div.innerHTML = `<span class="author">${d.author || "Anon"}:</span> ${d.text}`;
+        board.appendChild(div);
       });
+      board.scrollTop = board.scrollHeight;
+    });
+    document.getElementById("messageForm").addEventListener("submit", async e => {
+      e.preventDefault();
+      const text = document.getElementById("messageInput").value.trim();
+      const author = document.getElementById("name").value.trim() || "Anon";
+      if (!text) return;
+      await addDoc(messagesRef, { text, author, ts: Date.now() });
+      e.target.reset();
+    });
 
-      messageForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const val = messageInput.value.trim();
-        if (!val) return;
-        const msgText = 'You: ' + val;
-        const msg = document.createElement('div');
-        msg.className = 'message';
-        msg.textContent = msgText;
-        messageBoard.appendChild(msg);
-        const store = JSON.parse(localStorage.getItem('messages')) || [];
-        store.push(msgText);
-        localStorage.setItem('messages', JSON.stringify(store));
-        messageInput.value = '';
-        messageInput.focus();
+    // --- Stories ---
+    const storiesRef = collection(db, "stories");
+    onSnapshot(query(storiesRef, orderBy("ts")), snapshot => {
+      const board = document.getElementById("stories");
+      board.innerHTML = "";
+      snapshot.forEach(doc => {
+        const d = doc.data();
+        const div = document.createElement("div");
+        div.className = "story";
+        div.innerHTML = `<strong>${d.title}</strong><br>${d.content}`;
+        board.appendChild(div);
       });
+    });
+    document.getElementById("storyForm").addEventListener("submit", async e => {
+      e.preventDefault();
+      const title = document.getElementById("storyTitle").value.trim();
+      const content = document.getElementById("storyContent").value.trim();
+      if (!title || !content) return;
+      await addDoc(storiesRef, { title, content, ts: Date.now() });
+      e.target.reset();
+    });
 
-      // --- Stories with cooldown + edit ---
-      const storyBoard = document.getElementById('storyBoard');
-      const storyForm = document.getElementById('storyForm');
-      const storyTitle = document.getElementById('storyTitle');
-      const storyContent = document.getElementById('storyContent');
-      let lastStoryTime = parseInt(localStorage.getItem('lastStoryTime') || '0', 10);
-      const COOLDOWN_MS = 60000; // 60s
-
-      function renderStory(storyObj) {
-        const wrap = document.createElement('div');
-        wrap.className = 'story';
-        wrap.innerHTML = `
-          <h3>${storyObj.title}</h3>
-          <p>${storyObj.content}</p>
-          <div class="action-row">
-            <button class="editBtn">Edit</button>
-            <button class="deleteBtn">Delete</button>
-          </div>
-        `;
-        // Edit
-        wrap.querySelector('.editBtn').addEventListener('click', () => {
-          const updated = prompt('Edit your story text:', storyObj.content);
-          if (updated !== null && updated.trim() !== '') {
-            storyObj.content = updated.trim();
-            wrap.querySelector('p').textContent = storyObj.content;
-            const all = JSON.parse(localStorage.getItem('stories')) || [];
-            const idx = all.findIndex(s => s.id === storyObj.id);
-            if (idx > -1) { all[idx] = storyObj; localStorage.setItem('stories', JSON.stringify(all)); }
-          }
-        });
-        // Delete
-        wrap.querySelector('.deleteBtn').addEventListener('click', () => {
-          const all = JSON.parse(localStorage.getItem('stories')) || [];
-          const next = all.filter(s => s.id !== storyObj.id);
-          localStorage.setItem('stories', JSON.stringify(next));
-          wrap.remove();
-        });
-        storyBoard.appendChild(wrap);
-      }
-
-      // Load stories
-      const savedStories = JSON.parse(localStorage.getItem('stories')) || [];
-      savedStories.forEach(renderStory);
-
-      // Post story with cooldown
-      storyForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const now = Date.now();
-        if (now - lastStoryTime < COOLDOWN_MS) {
-          const wait = Math.ceil((COOLDOWN_MS - (now - lastStoryTime)) / 1000);
-          alert('Please wait ' + wait + 's before posting another story.');
-          return;
-        }
-        const title = storyTitle.value.trim();
-        const content = storyContent.value.trim();
-        if (!title || !content) return;
-
-        const newStory = { id: Date.now(), title, content };
-        renderStory(newStory);
-        const all = JSON.parse(localStorage.getItem('stories')) || [];
-        all.push(newStory);
-        localStorage.setItem('stories', JSON.stringify(all));
-        lastStoryTime = now;
-        localStorage.setItem('lastStoryTime', String(now));
-        storyForm.reset();
+    // --- Notes ---
+    const notesRef = collection(db, "notes");
+    onSnapshot(query(notesRef, orderBy("ts")), snapshot => {
+      const board = document.getElementById("notes");
+      board.innerHTML = "";
+      snapshot.forEach(doc => {
+        const d = doc.data();
+        const div = document.createElement("div");
+        div.className = "note";
+        div.textContent = d.text;
+        board.appendChild(div);
       });
+    });
+    document.getElementById("noteForm").addEventListener("submit", async e => {
+      e.preventDefault();
+      const text = document.getElementById("noteInput").value.trim();
+      if (!text) return;
+      await addDoc(notesRef, { text, ts: Date.now() });
+      e.target.reset();
+    });
 
-      // --- Notes ---
-      const notesList = document.getElementById('notesList');
-      const notesForm = document.getElementById('notesForm');
-      const noteInput = document.getElementById('noteInput');
-
-      const savedNotes = JSON.parse(localStorage.getItem('notes')) || [];
-      savedNotes.forEach(text => {
-        const li = document.createElement('li');
-        li.textContent = text;
-        notesList.appendChild(li);
-      });
-
-      notesForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const val = noteInput.value.trim();
-        if (!val) return;
-        const li = document.createElement('li');
-        li.textContent = val;
-        notesList.appendChild(li);
-        const store = JSON.parse(localStorage.getItem('notes')) || [];
-        store.push(val);
-        localStorage.setItem('notes', JSON.stringify(store));
-        noteInput.value = '';
-        noteInput.focus();
-      });
-
-      // --- Calendar (31 days, saved) ---
-      const calendarGrid = document.getElementById('calendarGrid');
-      const calendarForm = document.getElementById('calendarForm');
-      const eventDay = document.getElementById('eventDay');
-      const eventName = document.getElementById('eventName');
-
-      const savedEvents = JSON.parse(localStorage.getItem('events')) || {};
+    // --- Calendar ---
+    const eventsRef = collection(db, "events");
+    function renderCalendar(events) {
+      const grid = document.getElementById("calendar");
+      grid.innerHTML = "";
       for (let day = 1; day <= 31; day++) {
-        const cell = document.createElement('div');
-        cell.dataset.day = String(day);
+        const cell = document.createElement("div");
+        cell.className = "day";
         cell.innerHTML = `<strong>${day}</strong>`;
-        const evs = savedEvents[day] || [];
-        evs.forEach(ev => {
-          const span = document.createElement('span');
-          span.className = 'event';
-          span.textContent = ev;
-          cell.appendChild(span);
+        events.filter(ev => ev.day == day).forEach(ev => {
+          const div = document.createElement("div");
+          div.className = "event";
+          div.textContent = ev.name;
+          cell.appendChild(div);
         });
-        calendarGrid.appendChild(cell);
+        grid.appendChild(cell);
       }
-
-      calendarForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const d = parseInt(eventDay.value, 10);
-        const name = eventName.value.trim();
-        if (isNaN(d) || d < 1 || d > 31 || !name) return;
-
-        const cell = calendarGrid.querySelector('[data-day="' + d + '"]');
-        const span = document.createElement('span');
-        span.className = 'event';
-        span.textContent = name;
-        cell.appendChild(span);
-
-        const store = JSON.parse(localStorage.getItem('events')) || {};
-        store[d] = store[d] || [];
-        store[d].push(name);
-        localStorage.setItem('events', JSON.stringify(store));
-        calendarForm.reset();
-      });
+    }
+    onSnapshot(query(eventsRef, orderBy("ts")), snapshot => {
+      const events = [];
+      snapshot.forEach(doc => events.push(doc.data()));
+      renderCalendar(events);
+    });
+    document.getElementById("eventForm").addEventListener("submit", async e => {
+      e.preventDefault();
+      const day = parseInt(document.getElementById("eventDay").value);
+      const name = document.getElementById("eventName").value.trim();
+      if (!day || !name) return;
+      await addDoc(eventsRef, { day, name, ts: Date.now() });
+      e.target.reset();
     });
   </script>
 </body>

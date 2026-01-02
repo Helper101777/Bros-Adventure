@@ -15,12 +15,8 @@
     nav a:hover { background:var(--neon-green); color:var(--bg-black); }
     section { padding:2rem; max-width:1000px; margin:auto; }
     h2 { border-bottom:2px solid var(--neon-green); padding-bottom:.5rem; margin-bottom:1rem; }
-
-    /* Additions to match the rest */
     .card { background:var(--dark-gray); border:1px solid var(--neon-green); border-radius:6px; padding:1rem; margin-bottom:1rem; }
-    .row { display:flex; gap:.5rem; flex-wrap:wrap; }
     input, textarea, button { background:var(--bg-black); color:var(--neon-green); border:1px solid var(--neon-green); border-radius:4px; padding:.5rem; }
-    textarea { min-height:100px; }
     button:hover { background:var(--neon-green); color:var(--bg-black); cursor:pointer; }
     .message-board .message { padding:.4rem 0; border-bottom:1px dashed rgba(0,255,102,.35); }
     .calendar-grid { display:grid; grid-template-columns:repeat(7, 1fr); gap:.5rem; }
@@ -52,7 +48,7 @@
   <section id="messages">
     <h2>What's Up</h2>
     <div class="card message-board" id="messageBoard"></div>
-    <form id="messageForm" class="row">
+    <form id="messageForm">
       <input type="text" id="messageInput" placeholder="Type your message..." required />
       <button type="submit">Send</button>
     </form>
@@ -62,7 +58,7 @@
   <section id="stories">
     <h2>Stories</h2>
     <div id="storyBoard"></div>
-    <form id="storyForm" class="row">
+    <form id="storyForm">
       <input type="text" id="storyTitle" placeholder="Story title" required />
       <textarea id="storyContent" placeholder="Write your story..." required></textarea>
       <button type="submit">Post Story</button>
@@ -74,7 +70,7 @@
   <section id="notes">
     <h2>Notes</h2>
     <ul class="card" id="notesList" style="list-style:none; padding-left:1rem;"></ul>
-    <form id="notesForm" class="row">
+    <form id="notesForm">
       <input type="text" id="noteInput" placeholder="Add a new note..." required />
       <button type="submit">Add Note</button>
     </form>
@@ -84,7 +80,7 @@
   <section id="calendar">
     <h2>Event Calendar (31 Days)</h2>
     <div class="calendar-grid" id="calendarGrid"></div>
-    <form id="calendarForm" class="row">
+    <form id="calendarForm">
       <input type="number" id="eventDay" placeholder="Day (1-31)" min="1" max="31" required />
       <input type="text" id="eventName" placeholder="Event name" required />
       <button type="submit">Add Event</button>
@@ -97,28 +93,28 @@
     <div class="card" id="newsBoard"></div>
   </section>
 
-  <!-- Firebase (compat for simplicity) -->
+  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 
   <script>
-    // Replace with your real Firebase config (from Project Settings → Your apps → Web)
+    // ✅ Your bros-hub Firebase config
     const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_PROJECT_ID.appspot.com",
-      messagingSenderId: "YOUR_SENDER_ID",
-      appId: "YOUR_APP_ID"
+      apiKey: "AIzaSyA3kfPBpuSJo6QKU1hv-lG0UNfSVca0us4",
+      authDomain: "bros-hub.firebaseapp.com",
+      projectId: "bros-hub",
+      storageBucket: "bros-hub.firebasestorage.app",
+      messagingSenderId: "515943987938",
+      appId: "1:515943987938:web:285fa1b80c6b23e149bcbb",
+      measurementId: "G-TQ80WBSSZ6"
     };
 
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
-
     const $ = id => document.getElementById(id);
 
-    // --- Messaging (shared) ---
-    db.collection("messages").orderBy("ts", "asc").onSnapshot(snap => {
+    // Messaging
+    db.collection("messages").orderBy("ts","asc").onSnapshot(snap => {
       $("messageBoard").innerHTML = "";
       snap.forEach(doc => {
         const m = doc.data();
@@ -128,38 +124,28 @@
         $("messageBoard").appendChild(div);
       });
     });
-
     $("messageForm").addEventListener("submit", e => {
       e.preventDefault();
       const val = $("messageInput").value.trim();
       if (!val) return;
-      db.collection("messages").add({ text: "You: " + val, ts: Date.now() })
-        .then(() => { $("messageForm").reset(); });
+      db.collection("messages").add({ text: "You: " + val, ts: Date.now() });
+      e.target.reset();
     });
 
-    // --- Stories (shared) with cooldown + edit/delete ---
+    // Stories
     const COOLDOWN_MS = 60000;
     let lastStoryTime = 0;
-
-    db.collection("stories").orderBy("ts", "asc").onSnapshot(snap => {
+    db.collection("stories").orderBy("ts","asc").onSnapshot(snap => {
       $("storyBoard").innerHTML = "";
       snap.forEach(doc => {
         const s = doc.data();
         const wrap = document.createElement("div");
         wrap.className = "card";
-        wrap.innerHTML = `
-          <h3>${s.title}</h3>
-          <p>${s.content}</p>
-          <div class="actions">
-            <button class="editBtn">Edit</button>
-            <button class="deleteBtn">Delete</button>
-          </div>
-        `;
+        wrap.innerHTML = `<h3>${s.title}</h3><p>${s.content}</p>
+          <div class="actions"><button class="editBtn">Edit</button><button class="deleteBtn">Delete</button></div>`;
         wrap.querySelector(".editBtn").addEventListener("click", () => {
           const updated = prompt("Edit your story:", s.content);
-          if (updated && updated.trim() !== "") {
-            db.collection("stories").doc(doc.id).update({ content: updated.trim() });
-          }
+          if (updated) db.collection("stories").doc(doc.id).update({ content: updated });
         });
         wrap.querySelector(".deleteBtn").addEventListener("click", () => {
           db.collection("stories").doc(doc.id).delete();
@@ -167,91 +153,13 @@
         $("storyBoard").appendChild(wrap);
       });
     });
-
     $("storyForm").addEventListener("submit", e => {
       e.preventDefault();
       const now = Date.now();
       if (now - lastStoryTime < COOLDOWN_MS) {
-        const wait = Math.ceil((COOLDOWN_MS - (now - lastStoryTime)) / 1000);
-        alert("Please wait " + wait + "s before posting another story.");
+        alert("Wait before posting another story!");
         return;
       }
       const title = $("storyTitle").value.trim();
       const content = $("storyContent").value.trim();
-      if (!title || !content) return;
-      db.collection("stories").add({ title, content, ts: now })
-        .then(() => { lastStoryTime = now; $("storyForm").reset(); });
-    });
-
-    // --- Notes (shared) ---
-    db.collection("notes").orderBy("ts", "asc").onSnapshot(snap => {
-      $("notesList").innerHTML = "";
-      snap.forEach(doc => {
-        const n = doc.data();
-        const li = document.createElement("li");
-        li.className = "card";
-        li.textContent = n.text;
-        $("notesList").appendChild(li);
-      });
-    });
-
-    $("notesForm").addEventListener("submit", e => {
-      e.preventDefault();
-      const val = $("noteInput").value.trim();
-      if (!val) return;
-      db.collection("notes").add({ text: val, ts: Date.now() })
-        .then(() => { $("notesForm").reset(); });
-    });
-
-    // --- Calendar (shared, 31 days) ---
-    // Build the grid once
-    for (let day = 1; day <= 31; day++) {
-      const cell = document.createElement("div");
-      cell.className = "day";
-      cell.dataset.day = String(day);
-      cell.innerHTML = `<strong>${day}</strong>`;
-      $("calendarGrid").appendChild(cell);
-    }
-
-    // Live render events
-    db.collection("events").orderBy("ts", "asc").onSnapshot(snap => {
-      // Clear existing events
-      $("calendarGrid").querySelectorAll(".event").forEach(el => el.remove());
-      snap.forEach(doc => {
-        const ev = doc.data();
-        const cell = $("calendarGrid").querySelector(`[data-day="${ev.day}"]`);
-        if (cell) {
-          const span = document.createElement("span");
-          span.className = "event";
-          span.textContent = ev.name;
-          cell.appendChild(span);
-        }
-      });
-    });
-
-    $("calendarForm").addEventListener("submit", e => {
-      e.preventDefault();
-      const d = parseInt($("eventDay").value, 10);
-      const name = $("eventName").value.trim();
-      if (isNaN(d) || d < 1 || d > 31 || !name) return;
-      db.collection("events").add({ day: d, name, ts: Date.now() })
-        .then(() => { $("calendarForm").reset(); });
-    });
-
-    // --- Latest News (static + one fake) ---
-    const headlines = [
-      { title: "Global markets rebound after holiday slump", url: "https://www.bbc.com/news/business" },
-      { title: "Tech companies unveil new AI tools in 2026", url: "https://www.cnn.com/technology" },
-      { title: "Lebanon hosts major cultural festival this week", url: "https://www.aljazeera.com/culture" },
-      { title: "🚀 Bros Adventure launches secret spaceship to the moon (FAKE)", url: "#" }
-    ];
-    const newsBoard = $("newsBoard");
-    headlines.forEach(item => {
-      const div = document.createElement("div");
-      div.className = "card news-item";
-      div.innerHTML = `<a href="${item.url}" target="_blank">${item.title}</a>`;
-      newsBoard.appendChild(div);
-    });
-  </script>
-</body>
-</html>
+      if (!title

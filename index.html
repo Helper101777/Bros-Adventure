@@ -1,102 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Bros Adventure Hub</title>
-  <style>
-    :root { --bg-black:#0d0d0d; --neon-green:#00ff66; --dark-gray:#1a1a1a; }
-    body { font-family:'Trebuchet MS', sans-serif; margin:0; background:var(--bg-black); color:var(--neon-green); }
-    header { text-align:center; padding:2rem; background:var(--dark-gray); border-bottom:2px solid var(--neon-green); }
-    header h1 { margin:0; font-size:2.5rem; color:var(--neon-green); }
-    nav { background:var(--bg-black); display:flex; justify-content:center; padding:.5rem; border-bottom:2px solid var(--neon-green); }
-    nav ul { list-style:none; display:flex; gap:1rem; margin:0; padding:0; }
-    nav a { text-decoration:none; color:var(--neon-green); font-weight:bold; padding:.5rem 1rem; border:1px solid var(--neon-green); border-radius:4px; transition:background .3s, color .3s; }
-    nav a:hover { background:var(--neon-green); color:var(--bg-black); }
-    section { padding:2rem; max-width:1000px; margin:auto; }
-    h2 { border-bottom:2px solid var(--neon-green); padding-bottom:.5rem; margin-bottom:1rem; }
-    .card { background:var(--dark-gray); border:1px solid var(--neon-green); border-radius:6px; padding:1rem; margin-bottom:1rem; }
-    input, textarea, button { background:var(--bg-black); color:var(--neon-green); border:1px solid var(--neon-green); border-radius:4px; padding:.5rem; }
-    button:hover { background:var(--neon-green); color:var(--bg-black); cursor:pointer; }
-    .message-board .message { padding:.4rem 0; border-bottom:1px dashed rgba(0,255,102,.35); }
-    .calendar-grid { display:grid; grid-template-columns:repeat(7, 1fr); gap:.5rem; }
-    .calendar-grid .day { background:var(--dark-gray); border:1px solid var(--neon-green); border-radius:4px; padding:.5rem; min-height:90px; }
-    .event { display:block; margin-top:.35rem; font-size:.85rem; }
-    .actions { display:flex; gap:.4rem; margin-top:.5rem; }
-    .actions button { padding:.35rem .6rem; font-size:.85rem; }
-    .news-item a { color:var(--neon-green); text-decoration:none; font-weight:bold; }
-    .news-item a:hover { color:#fff; }
-  </style>
+  <meta charset="UTF-8">
+  <title>Bros Hub Test</title>
 </head>
 <body>
-  <header>
-    <h1>Bros Adventure Hub</h1>
-    <p>Black & Green Bros Style</p>
-  </header>
+  <h1>Message Board</h1>
+  <div id="messages"></div>
+  <form id="form">
+    <input id="input" placeholder="Type message" required>
+    <button>Send</button>
+  </form>
 
-  <nav>
-    <ul>
-      <li><a href="#messages">What's Up</a></li>
-      <li><a href="#stories">Stories</a></li>
-      <li><a href="#notes">Notes</a></li>
-      <li><a href="#calendar">Calendar</a></li>
-      <li><a href="#news">Latest News</a></li>
-    </ul>
-  </nav>
-
-  <!-- Messaging -->
-  <section id="messages">
-    <h2>What's Up</h2>
-    <div class="card message-board" id="messageBoard"></div>
-    <form id="messageForm">
-      <input type="text" id="messageInput" placeholder="Type your message..." required />
-      <button type="submit">Send</button>
-    </form>
-  </section>
-
-  <!-- Stories -->
-  <section id="stories">
-    <h2>Stories</h2>
-    <div id="storyBoard"></div>
-    <form id="storyForm">
-      <input type="text" id="storyTitle" placeholder="Story title" required />
-      <textarea id="storyContent" placeholder="Write your story..." required></textarea>
-      <button type="submit">Post Story</button>
-    </form>
-    <p class="card" style="font-size:.9rem;opacity:.85;">Cooldown: 60 seconds between posts. You can edit or delete your story.</p>
-  </section>
-
-  <!-- Notes -->
-  <section id="notes">
-    <h2>Notes</h2>
-    <ul class="card" id="notesList" style="list-style:none; padding-left:1rem;"></ul>
-    <form id="notesForm">
-      <input type="text" id="noteInput" placeholder="Add a new note..." required />
-      <button type="submit">Add Note</button>
-    </form>
-  </section>
-
-  <!-- Calendar -->
-  <section id="calendar">
-    <h2>Event Calendar (31 Days)</h2>
-    <div class="calendar-grid" id="calendarGrid"></div>
-    <form id="calendarForm">
-      <input type="number" id="eventDay" placeholder="Day (1-31)" min="1" max="31" required />
-      <input type="text" id="eventName" placeholder="Event name" required />
-      <button type="submit">Add Event</button>
-    </form>
-  </section>
-
-  <!-- Latest News -->
-  <section id="news">
-    <h2>Latest News</h2>
-    <div class="card" id="newsBoard"></div>
-  </section>
-
-  <!-- Firebase SDKs -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, onSnapshot, orderBy, query, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyA3kfPBpuSJo6QKU1hv-lG0UNfSVca0us4",
@@ -110,52 +28,30 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-    const $ = id => document.getElementById(id);
 
-    // Messaging
+    const messagesDiv = document.getElementById("messages");
+    const form = document.getElementById("form");
+    const input = document.getElementById("input");
+
     const messagesRef = collection(db, "messages");
-    onSnapshot(query(messagesRef, orderBy("ts")), snap => {
-      $("messageBoard").innerHTML = "";
-      snap.forEach(docSnap => {
-        const m = docSnap.data();
-        const div = document.createElement("div");
-        div.className = "message";
-        div.textContent = m.text;
-        $("messageBoard").appendChild(div);
+
+    // Listen for changes
+    onSnapshot(query(messagesRef, orderBy("ts")), snapshot => {
+      messagesDiv.innerHTML = "";
+      snapshot.forEach(doc => {
+        const p = document.createElement("p");
+        p.textContent = doc.data().text;
+        messagesDiv.appendChild(p);
       });
-    });
-    $("messageForm").addEventListener("submit", async e => {
-      e.preventDefault();
-      const val = $("messageInput").value.trim();
-      if (!val) return;
-      await addDoc(messagesRef, { text: "You: " + val, ts: Date.now() });
-      e.target.reset();
     });
 
-    // Stories
-    const storiesRef = collection(db, "stories");
-    onSnapshot(query(storiesRef, orderBy("ts")), snap => {
-      $("storyBoard").innerHTML = "";
-      snap.forEach(docSnap => {
-        const s = docSnap.data();
-        const wrap = document.createElement("div");
-        wrap.className = "card";
-        wrap.innerHTML = `<h3>${s.title}</h3><p>${s.content}</p>
-          <div class="actions"><button class="editBtn">Edit</button><button class="deleteBtn">Delete</button></div>`;
-        wrap.querySelector(".editBtn").addEventListener("click", async () => {
-          const updated = prompt("Edit your story:", s.content);
-          if (updated) await updateDoc(doc(storiesRef, docSnap.id), { content: updated });
-        });
-        wrap.querySelector(".deleteBtn").addEventListener("click", async () => {
-          await deleteDoc(doc(storiesRef, docSnap.id));
-        });
-        $("storyBoard").appendChild(wrap);
-      });
-    });
-    $("storyForm").addEventListener("submit", async e => {
+    // Add new message
+    form.addEventListener("submit", async e => {
       e.preventDefault();
-      const title = $("storyTitle").value.trim();
-      const content = $("storyContent").value.trim();
-      if (!title || !content) return;
-      await addDoc(storiesRef, { title, content, ts: Date.now() });
-     
+      await addDoc(messagesRef, { text: input.value, ts: Date.now() });
+      input.value = "";
+    });
+  </script>
+</body>
+</html>
+

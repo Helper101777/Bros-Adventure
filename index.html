@@ -151,20 +151,12 @@
     });
     document.getElementById("messageForm").addEventListener("submit", async e => {
       e.preventDefault();
-      const text = document.getElementById("messageInput").value.trim();
-      if (!text) return;
-      await addDoc(messagesRef, { text, ts: Date.now() });
-      e.target.reset();
-    });
-
-    // --- Stories ---
-    const storiesRef = collection(db, "stories");
-    onSnapshot(query(storiesRef, orderBy("ts")), snapshot => {
-      const board = document.getElementById("storiesBoard");
+      const text = document.getElementById("
       board.innerHTML = "";
       snapshot.forEach(doc => {
         const d = doc.data();
         const div = document.createElement("div");
         div.className = "story";
         div.innerHTML = `<strong>${
+
 

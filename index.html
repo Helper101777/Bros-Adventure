@@ -15,20 +15,17 @@
     section { padding:1.5rem; max-width:1000px; margin:auto; }
     h2 { border-bottom:2px solid var(--neon-green); padding-bottom:.4rem; margin-bottom:1rem; }
     .panel { background:var(--dark-gray); border:1px solid var(--neon-green); border-radius:6px; padding:1rem; margin-bottom:1rem; }
-    .item { border-bottom:1px dashed var(--neon-green); padding:.5rem 0; display:flex; justify-content:space-between; align-items:center; }
+    .item { border-bottom:1px dashed var(--neon-green); padding:.5rem 0; }
     .item:last-child { border-bottom:none; }
-    .delete-btn { background:none; border:none; color:#ff6666; font-weight:bold; cursor:pointer; margin-left:.5rem; }
     input, textarea, button { background:var(--bg-black); color:var(--neon-green); border:1px solid var(--neon-green); border-radius:4px; padding:.6rem; caret-color:var(--neon-green); }
     input, textarea { width:100%; }
     button:hover { background:var(--neon-green); color:var(--bg-black); }
     .admins { display:flex; gap:1rem; flex-wrap:wrap; }
-    .admin-card { background:var(--dark-gray); border:1px solid var(--neon-green); border-radius:6px; padding:1rem; flex:1 1 220px; text-align:center; position:relative; }
-    .admin-card button { position:absolute; top:5px; right:5px; }
+    .admin-card { background:var(--dark-gray); border:1px solid var(--neon-green); border-radius:6px; padding:1rem; flex:1 1 220px; text-align:center; }
     .calendar-grid { display:grid; grid-template-columns:repeat(7, 1fr); gap:.5rem; }
     .day { background:var(--dark-gray); border:1px solid var(--neon-green); border-radius:4px; padding:.5rem; min-height:90px; }
     .day strong { display:block; margin-bottom:.3rem; }
-    .event { display:block; font-size:.85rem; margin:.2rem 0; position:relative; }
-    .event button { position:absolute; right:0; top:0; }
+    .event { display:block; font-size:.85rem; margin:.2rem 0; }
   </style>
 </head>
 <body>
@@ -45,7 +42,6 @@
     </ul>
   </nav>
 
-  <!-- Chat -->
   <section id="chat">
     <h2>Chat</h2>
     <div id="messages" class="panel"></div>
@@ -55,7 +51,6 @@
     </form>
   </section>
 
-  <!-- Stories -->
   <section id="stories">
     <h2>Stories</h2>
     <div id="storiesBoard" class="panel"></div>
@@ -66,7 +61,6 @@
     </form>
   </section>
 
-  <!-- Notes -->
   <section id="notes">
     <h2>Notes</h2>
     <div id="notesBoard" class="panel"></div>
@@ -76,7 +70,6 @@
     </form>
   </section>
 
-  <!-- Calendar -->
   <section id="calendar">
     <h2>Calendar</h2>
     <div id="calendarGrid" class="calendar-grid"></div>
@@ -87,7 +80,6 @@
     </form>
   </section>
 
-  <!-- News -->
   <section id="news">
     <h2>Latest News</h2>
     <div id="newsBoard" class="panel"></div>
@@ -98,7 +90,6 @@
     </form>
   </section>
 
-  <!-- Announcements -->
   <section id="announcements">
     <h2>Announcements</h2>
     <div id="announcementsBoard" class="panel"></div>
@@ -109,7 +100,6 @@
     </form>
   </section>
 
-  <!-- Admins -->
   <section id="admins">
     <h2>Admins</h2>
     <div class="admins" id="adminsBoard"></div>
@@ -123,7 +113,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
     import { 
-      getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, doc, deleteDoc
+      getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp
     } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -148,15 +138,29 @@
         const d = docSnap.data();
         const div = document.createElement("div");
         div.className = "item";
-        const span = document.createElement("span");
-        span.textContent = d.text ?? "";
-        const btn = document.createElement("button");
-        btn.textContent = "❌";
-        btn.className = "delete-btn";
-        btn.onclick = async () => { await deleteDoc(doc(db,"messages",docSnap.id)); };
-        div.appendChild(span);
-        div.appendChild(btn);
+        div.textContent = d.text ?? "";
         board.appendChild(div);
       });
     });
     document.getElementById("messageForm").addEventListener("submit", async e => {
+      e.preventDefault();
+      const text = document.getElementById("messageInput").value.trim();
+      if (!text) return;
+      await addDoc(messagesRef, { text, tsClient: Date.now(), tsServer: serverTimestamp() });
+      e.target.reset();
+    });
+
+    // Stories
+    const storiesRef = collection(db, "stories");
+    onSnapshot(query(storiesRef, orderBy("tsClient","asc")), snapshot => {
+      const board = document.getElementById("storiesBoard");
+      board.innerHTML = "";
+      snapshot.forEach(docSnap => {
+        const d = docSnap.data();
+        const div = document.createElement("div");
+        div.className = "item";
+        div.textContent = `${d.title ?? ""} — ${d.content ?? ""}`;
+        board.appendChild(div);
+      });
+    });
+    document.getElement

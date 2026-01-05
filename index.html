@@ -6,38 +6,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     :root { --bg-black:#0d0d0d; --neon-green:#00ff66; --dark-gray:#1a1a1a; }
-    * { box-sizing: border-box; }
     body { font-family:'Trebuchet MS', sans-serif; margin:0; background:var(--bg-black); color:var(--neon-green); }
     header { text-align:center; padding:2rem; background:var(--dark-gray); border-bottom:2px solid var(--neon-green); }
-    header h1 { margin:0; font-size:2.2rem; color:var(--neon-green); }
-    nav { background:var(--bg-black); display:flex; justify-content:center; padding:.5rem; border-bottom:2px solid var(--neon-green); position:sticky; top:0; z-index:10; }
+    nav { background:var(--bg-black); display:flex; justify-content:center; padding:.5rem; border-bottom:2px solid var(--neon-green); position:sticky; top:0; }
     nav ul { list-style:none; display:flex; gap:.5rem; margin:0; padding:0; flex-wrap:wrap; }
-    nav a { text-decoration:none; color:var(--neon-green); font-weight:bold; padding:.4rem .8rem; border:1px solid var(--neon-green); border-radius:4px; transition:background .2s, color .2s; }
+    nav a { text-decoration:none; color:var(--neon-green); font-weight:bold; padding:.4rem .8rem; border:1px solid var(--neon-green); border-radius:4px; }
     nav a:hover { background:var(--neon-green); color:var(--bg-black); }
     section { padding:1.5rem; max-width:1000px; margin:auto; }
-    h2 { border-bottom:2px solid var(--neon-green); padding-bottom:.4rem; margin-bottom:1rem; font-size:1.5rem; }
+    h2 { border-bottom:2px solid var(--neon-green); padding-bottom:.4rem; margin-bottom:1rem; }
     .panel { background:var(--dark-gray); border:1px solid var(--neon-green); border-radius:6px; padding:1rem; margin-bottom:1rem; }
-    .item { border-bottom:1px dashed var(--neon-green); padding:.5rem 0; }
+    .item { border-bottom:1px dashed var(--neon-green); padding:.5rem 0; display:flex; justify-content:space-between; align-items:center; }
     .item:last-child { border-bottom:none; }
-    input, textarea, button { background:var(--bg-black); color:var(--neon-green); border:1px solid var(--neon-green); border-radius:4px; padding:.6rem; }
-    input, textarea { width:100%; caret-color:var(--neon-green); }
-    button { padding:.6rem 1rem; }
-    button:hover { background:var(--neon-green); color:var(--bg-black); cursor:pointer; }
-    /* Reduce intrusive blue focus lines while keeping accessibility reasonable */
-    input:focus, textarea:focus, button:focus { outline: 2px solid rgba(0,255,102,.4); }
+    .delete-btn { background:none; border:none; color:#ff6666; font-weight:bold; cursor:pointer; margin-left:.5rem; }
+    input, textarea, button { background:var(--bg-black); color:var(--neon-green); border:1px solid var(--neon-green); border-radius:4px; padding:.6rem; caret-color:var(--neon-green); }
+    input, textarea { width:100%; }
+    button:hover { background:var(--neon-green); color:var(--bg-black); }
     .admins { display:flex; gap:1rem; flex-wrap:wrap; }
-    .admin-card { background:var(--dark-gray); border:1px solid var(--neon-green); border-radius:6px; padding:1rem; flex:1 1 220px; text-align:center; }
+    .admin-card { background:var(--dark-gray); border:1px solid var(--neon-green); border-radius:6px; padding:1rem; flex:1 1 220px; text-align:center; position:relative; }
+    .admin-card button { position:absolute; top:5px; right:5px; }
     .calendar-grid { display:grid; grid-template-columns:repeat(7, 1fr); gap:.5rem; }
     .day { background:var(--dark-gray); border:1px solid var(--neon-green); border-radius:4px; padding:.5rem; min-height:90px; }
     .day strong { display:block; margin-bottom:.3rem; }
-    .event { display:block; font-size:.85rem; margin:.2rem 0; }
-    .action-row { display:flex; gap:.5rem; flex-wrap:wrap; }
-    .row-2 { display:grid; grid-template-columns:1fr 1fr; gap:.5rem; }
-    @media (max-width:600px) {
-      .calendar-grid { grid-template-columns:repeat(3, 1fr); }
-      nav ul { gap:.3rem; }
-      header h1 { font-size:1.8rem; }
-    }
+    .event { display:block; font-size:.85rem; margin:.2rem 0; position:relative; }
+    .event button { position:absolute; right:0; top:0; }
   </style>
 </head>
 <body>
@@ -58,7 +49,7 @@
   <section id="chat">
     <h2>Chat</h2>
     <div id="messages" class="panel"></div>
-    <form id="messageForm" class="action-row">
+    <form id="messageForm">
       <input id="messageInput" placeholder="Type message..." required>
       <button type="submit">Send</button>
     </form>
@@ -68,7 +59,7 @@
   <section id="stories">
     <h2>Stories</h2>
     <div id="storiesBoard" class="panel"></div>
-    <form id="storyForm" class="row-2">
+    <form id="storyForm">
       <input id="storyTitle" placeholder="Title" required>
       <textarea id="storyContent" placeholder="Content" required></textarea>
       <button type="submit">Add Story</button>
@@ -79,7 +70,7 @@
   <section id="notes">
     <h2>Notes</h2>
     <div id="notesBoard" class="panel"></div>
-    <form id="noteForm" class="action-row">
+    <form id="noteForm">
       <input id="noteInput" placeholder="Write a note..." required>
       <button type="submit">Add Note</button>
     </form>
@@ -89,7 +80,7 @@
   <section id="calendar">
     <h2>Calendar</h2>
     <div id="calendarGrid" class="calendar-grid"></div>
-    <form id="eventForm" class="row-2">
+    <form id="eventForm">
       <input id="eventDay" type="number" min="1" max="31" placeholder="Day (1-31)" required>
       <input id="eventName" placeholder="Event name" required>
       <button type="submit">Add Event</button>
@@ -100,7 +91,7 @@
   <section id="news">
     <h2>Latest News</h2>
     <div id="newsBoard" class="panel"></div>
-    <form id="newsForm" class="row-2">
+    <form id="newsForm">
       <input id="newsTitle" placeholder="Headline" required>
       <textarea id="newsContent" placeholder="News content..." required></textarea>
       <button type="submit">Add News</button>
@@ -111,7 +102,7 @@
   <section id="announcements">
     <h2>Announcements</h2>
     <div id="announcementsBoard" class="panel"></div>
-    <form id="announcementForm" class="row-2">
+    <form id="announcementForm">
       <input id="announcementTitle" placeholder="Title" required>
       <textarea id="announcementContent" placeholder="Announcement details..." required></textarea>
       <button type="submit">Add Announcement</button>
@@ -122,7 +113,7 @@
   <section id="admins">
     <h2>Admins</h2>
     <div class="admins" id="adminsBoard"></div>
-    <form id="adminForm" class="row-2">
+    <form id="adminForm">
       <input id="adminName" placeholder="Admin name" required>
       <input id="adminRole" placeholder="Role" required>
       <button type="submit">Add Admin</button>
@@ -132,7 +123,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
     import { 
-      getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp 
+      getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, doc, deleteDoc
     } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -148,184 +139,24 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // Helper to safely render text
-    const esc = (s) => String(s ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    // Helper to render with delete button
+    function makeItem(text, id, colName) {
+      const div = document.createElement("div");
+      div.className = "item";
+      div.textContent = text;
+      const btn = document.createElement("button");
+      btn.textContent = "❌";
+      btn.className = "delete-btn";
+      btn.onclick = async () => { await deleteDoc(doc(db, colName, id)); };
+      div.appendChild(btn);
+      return div;
+    }
 
     // Chat
     const messagesRef = collection(db, "messages");
-    onSnapshot(query(messagesRef, orderBy("ts","asc")), snapshot => {
+    onSnapshot(query(messagesRef, orderBy("tsClient","asc")), snapshot => {
       const board = document.getElementById("messages");
       board.innerHTML = "";
-      snapshot.forEach(doc => {
-        const d = doc.data();
-        const div = document.createElement("div");
-        div.className = "item";
-        div.textContent = d.text ?? "";
-        board.appendChild(div);
-      });
-    }, err => console.error("Chat listener error:", err));
-    document.getElementById("messageForm").addEventListener("submit", async e => {
-      e.preventDefault();
-      const text = document.getElementById("messageInput").value.trim();
-      if (!text) return;
-      try {
-        await addDoc(messagesRef, { text, ts: serverTimestamp() });
-        e.target.reset();
-      } catch (err) { console.error("Chat add error:", err); }
-    });
-
-    // Stories
-    const storiesRef = collection(db, "stories");
-    onSnapshot(query(storiesRef, orderBy("ts","asc")), snapshot => {
-      const board = document.getElementById("storiesBoard");
-      board.innerHTML = "";
-      snapshot.forEach(doc => {
-        const d = doc.data();
-        const div = document.createElement("div");
-        div.className = "item";
-        div.innerHTML = `<strong>${esc(d.title)}</strong><br>${esc(d.content)}`;
-        board.appendChild(div);
-      });
-    }, err => console.error("Stories listener error:", err));
-    document.getElementById("storyForm").addEventListener("submit", async e => {
-      e.preventDefault();
-      const title = document.getElementById("storyTitle").value.trim();
-      const content = document.getElementById("storyContent").value.trim();
-      if (!title || !content) return;
-      try {
-        await addDoc(storiesRef, { title, content, ts: serverTimestamp() });
-        e.target.reset();
-      } catch (err) { console.error("Story add error:", err); }
-    });
-
-    // Notes
-    const notesRef = collection(db, "notes");
-    onSnapshot(query(notesRef, orderBy("ts","asc")), snapshot => {
-      const board = document.getElementById("notesBoard");
-      board.innerHTML = "";
-      snapshot.forEach(doc => {
-        const d = doc.data();
-        const div = document.createElement("div");
-        div.className = "item";
-        div.textContent = d.text ?? "";
-        board.appendChild(div);
-      });
-    }, err => console.error("Notes listener error:", err));
-    document.getElementById("noteForm").addEventListener("submit", async e => {
-      e.preventDefault();
-      const text = document.getElementById("noteInput").value.trim();
-      if (!text) return;
-      try {
-        await addDoc(notesRef, { text, ts: serverTimestamp() });
-        e.target.reset();
-      } catch (err) { console.error("Note add error:", err); }
-    });
-
-    // Calendar
-    const eventsRef = collection(db, "events");
-    const renderCalendar = (events) => {
-      const grid = document.getElementById("calendarGrid");
-      grid.innerHTML = "";
-      for (let day = 1; day <= 31; day++) {
-        const cell = document.createElement("div");
-        cell.className = "day";
-        cell.innerHTML = `<strong>${day}</strong>`;
-        events.filter(ev => Number(ev.day) === day).forEach(ev => {
-          const evDiv = document.createElement("span");
-          evDiv.className = "event";
-          evDiv.textContent = ev.name ?? "";
-          cell.appendChild(evDiv);
-        });
-        grid.appendChild(cell);
-      }
-    };
-    onSnapshot(query(eventsRef, orderBy("ts","asc")), snapshot => {
-      const events = [];
-      snapshot.forEach(doc => events.push(doc.data()));
-      renderCalendar(events);
-    }, err => console.error("Events listener error:", err));
-    document.getElementById("eventForm").addEventListener("submit", async e => {
-      e.preventDefault();
-      const day = parseInt(document.getElementById("eventDay").value, 10);
-      const name = document.getElementById("eventName").value.trim();
-      if (!day || !name) return;
-      try {
-        await addDoc(eventsRef, { day, name, ts: serverTimestamp() });
-        e.target.reset();
-      } catch (err) { console.error("Event add error:", err); }
-    });
-
-    // News
-    const newsRef = collection(db, "news");
-    onSnapshot(query(newsRef, orderBy("ts","asc")), snapshot => {
-      const board = document.getElementById("newsBoard");
-      board.innerHTML = "";
-      snapshot.forEach(doc => {
-        const d = doc.data();
-        const div = document.createElement("div");
-        div.className = "item";
-        div.innerHTML = `<strong>${esc(d.title)}</strong><br>${esc(d.content)}`;
-        board.appendChild(div);
-      });
-    }, err => console.error("News listener error:", err));
-    document.getElementById("newsForm").addEventListener("submit", async e => {
-      e.preventDefault();
-      const title = document.getElementById("newsTitle").value.trim();
-      const content = document.getElementById("newsContent").value.trim();
-      if (!title || !content) return;
-      try {
-        await addDoc(newsRef, { title, content, ts: serverTimestamp() });
-        e.target.reset();
-      } catch (err) { console.error("News add error:", err); }
-    });
-
-    // Announcements
-    const announcementsRef = collection(db, "announcements");
-    onSnapshot(query(announcementsRef, orderBy("ts","asc")), snapshot => {
-      const board = document.getElementById("announcementsBoard");
-      board.innerHTML = "";
-      snapshot.forEach(doc => {
-        const d = doc.data();
-        const div = document.createElement("div");
-        div.className = "item";
-        div.innerHTML = `<strong>${esc(d.title)}</strong><br>${esc(d.content)}`;
-        board.appendChild(div);
-      });
-    }, err => console.error("Announcements listener error:", err));
-    document.getElementById("announcementForm").addEventListener("submit", async e => {
-      e.preventDefault();
-      const title = document.getElementById("announcementTitle").value.trim();
-      const content = document.getElementById("announcementContent").value.trim();
-      if (!title || !content) return;
-      try {
-        await addDoc(announcementsRef, { title, content, ts: serverTimestamp() });
-        e.target.reset();
-      } catch (err) { console.error("Announcement add error:", err); }
-    });
-
-    // Admins
-    const adminsRef = collection(db, "admins");
-    onSnapshot(query(adminsRef, orderBy("ts","asc")), snapshot => {
-      const board = document.getElementById("adminsBoard");
-      board.innerHTML = "";
-      snapshot.forEach(doc => {
-        const d = doc.data();
-        const card = document.createElement("div");
-        card.className = "admin-card";
-        card.innerHTML = `<strong>${esc(d.name)}</strong><br>${esc(d.role)}`;
-        board.appendChild(card);
-      });
-    }, err => console.error("Admins listener error:", err));
-    document.getElementById("adminForm").addEventListener("submit", async e => {
-      e.preventDefault();
-      const name = document.getElementById("adminName").value.trim();
-      const role = document.getElementById("adminRole").value.trim();
-      if (!name || !role) return;
-      try {
-        await addDoc(adminsRef, { name, role, ts: serverTimestamp() });
-        e.target.reset();
-      } catch (err) { console.error("Admin add error:", err); }
-    });
-  </script>
-</body>
-</html>
+      snapshot.forEach(docSnap => {
+        const d = docSnap.data();
+        board.appendChild(makeItem(d.text, docSnap.id, "messages

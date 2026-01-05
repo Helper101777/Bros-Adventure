@@ -15,7 +15,7 @@
     section { padding:2rem; max-width:1000px; margin:auto; }
     h2 { border-bottom:2px solid var(--neon-green); padding-bottom:.5rem; margin-bottom:1rem; }
     .message-board, .story, .note, .announcement, .news-item { background:var(--dark-gray); color:var(--neon-green); border:1px solid var(--neon-green); border-radius:6px; padding:1rem; margin-bottom:1rem; }
-    input, textarea, button { background:var(--bg-black); color:var(--neon-green); border:1px solid var(--neon-green); border-radius:4px; padding:.5rem; }
+    input, textarea, button { background:var(--bg-black); color:var(--neon-green); border:1px solid var(--neon-green); border-radius:4px; padding:.5rem; caret-color:var(--neon-green); }
     button:hover { background:var(--neon-green); color:var(--bg-black); cursor:pointer; }
     .admin-card { background:var(--dark-gray); padding:1rem; border:1px solid var(--neon-green); border-radius:6px; flex:1 1 200px; text-align:center; margin:.5rem; }
     .admins { display:flex; gap:1rem; flex-wrap:wrap; }
@@ -26,10 +26,7 @@
   </style>
 </head>
 <body>
-  <header>
-    <h1>Bros Hub</h1>
-  </header>
-
+  <header><h1>Bros Hub</h1></header>
   <nav>
     <ul>
       <li><a href="#chat">Chat</a></li>
@@ -45,7 +42,7 @@
   <!-- Chat -->
   <section id="chat">
     <h2>Chat</h2>
-    <div id="messages" class="message-board"></div>
+    <div id="messages"></div>
     <form id="messageForm" class="action-row">
       <input id="messageInput" placeholder="Type message..." required>
       <button>Send</button>
@@ -135,7 +132,7 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // --- Chat ---
+    // Chat
     const messagesRef = collection(db, "messages");
     onSnapshot(query(messagesRef, orderBy("ts")), snapshot => {
       const board = document.getElementById("messages");
@@ -147,16 +144,21 @@
         div.textContent = d.text;
         board.appendChild(div);
       });
-      board.scrollTop = board.scrollHeight;
     });
     document.getElementById("messageForm").addEventListener("submit", async e => {
       e.preventDefault();
-      const text = document.getElementById("
+      const text = document.getElementById("messageInput").value.trim();
+      if (!text) return;
+      await addDoc(messagesRef, { text, ts: Date.now() });
+      e.target.reset();
+    });
+
+    // Stories
+    const storiesRef = collection(db, "stories");
+    onSnapshot(query(storiesRef, orderBy("ts")), snapshot => {
+      const board = document.getElementById("storiesBoard");
       board.innerHTML = "";
       snapshot.forEach(doc => {
         const d = doc.data();
         const div = document.createElement("div");
-        div.className = "story";
-        div.innerHTML = `<strong>${
-
-
+        div.className = "

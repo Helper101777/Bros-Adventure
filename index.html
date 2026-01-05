@@ -129,18 +129,23 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // Chat
-    const messagesRef = collection(db, "messages");
-    onSnapshot(query(messagesRef, orderBy("tsClient","asc")), snapshot => {
-      const board = document.getElementById("messages");
+    // Helper to render items
+    function renderBoard(boardId, docs, formatFn) {
+      const board = document.getElementById(boardId);
       board.innerHTML = "";
-      snapshot.forEach(docSnap => {
+      docs.forEach(docSnap => {
         const d = docSnap.data();
         const div = document.createElement("div");
         div.className = "item";
-        div.textContent = d.text ?? "";
+        div.textContent = formatFn(d);
         board.appendChild(div);
       });
+    }
+
+    // Chat
+    const messagesRef = collection(db, "messages");
+    onSnapshot(query(messagesRef, orderBy("tsClient","asc")), snap => {
+      renderBoard("messages", snap.docs, d => d.text ?? "");
     });
     document.getElementById("messageForm").addEventListener("submit", async e => {
       e.preventDefault();
@@ -152,15 +157,10 @@
 
     // Stories
     const storiesRef = collection(db, "stories");
-    onSnapshot(query(storiesRef, orderBy("tsClient","asc")), snapshot => {
-      const board = document.getElementById("storiesBoard");
-      board.innerHTML = "";
-      snapshot.forEach(docSnap => {
-        const d = docSnap.data();
-        const div = document.createElement("div");
-        div.className = "item";
-        div.textContent = `${d.title ?? ""} — ${d.content ?? ""}`;
-        board.appendChild(div);
-      });
+    onSnapshot(query(storiesRef, orderBy("tsClient","asc")), snap => {
+      renderBoard("storiesBoard", snap.docs, d => `${d.title ?? ""} — ${d.content ?? ""}`);
     });
-    document.getElement
+    document.getElementById("storyForm").addEventListener("submit", async e => {
+      e.preventDefault();
+      const title = document.getElementById("storyTitle").value.trim();
+      const
